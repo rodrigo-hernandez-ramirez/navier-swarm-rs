@@ -1,98 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Navier-Swarm // Mérida.MX — Formally Verified Swarm</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#080a14;color:#cbd5e1;font-family:Inter,sans-serif;overflow-x:hidden}
-canvas#swarm{position:fixed;inset:0;z-index:0;pointer-events:none}
-.mono{font-family:"JetBrains Mono",monospace}
-.top{display:flex;justify-content:space-between;align-items:center;padding:28px 24px;max-width:1100px;margin:0 auto;position:relative;z-index:2}
-.brand{font-weight:900;letter-spacing:.08em;font-size:14px;color:#e2e8f0;line-height:1.2}
-.badge-lean{border:1px solid rgba(74,222,128,.3);background:rgba(74,222,128,.08);color:#4ade80;padding:10px 18px;border-radius:999px;font-size:13px;display:flex;gap:8px;align-items:center}
-.lang{display:flex;flex-direction:column;gap:6px;margin-left:12px}
-.lang button{border:0;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer}
-.lang .on{background:white;color:black}.lang .off{background:#1e2338;color:#94a3b8;border:1px solid #2a3050}
-.hero{max-width:1100px;margin:0 auto;padding:20px 24px 40px;position:relative;z-index:2}
-.pill{display:inline-block;border:1px solid rgba(99,102,241,.4);background:rgba(99,102,241,.12);color:#818cf8;padding:8px 16px;border-radius:999px;font-size:12px;letter-spacing:.08em;font-weight:700;margin-bottom:18px}
-h1{font-size:clamp(38px,7vw,72px);line-height:.95;letter-spacing:-.04em;color:white;font-weight:900}
-h1 span{display:block}
-.desc{margin-top:22px;font-size:18px;line-height:1.6;color:#94a3b8;max-width:560px}
-.desc2{margin-top:26px;font-size:18px;color:#94a3b8}
-.btns{display:flex;gap:14px;margin-top:28px;flex-wrap:wrap}
-.btn{padding:18px 26px;border-radius:16px;font-weight:800;font-size:16px;text-decoration:none;display:inline-flex;align-items:center;transition:.2s}
-.btn-green{background:#4af49a;color:#052e16;box-shadow:0 0 0 1px rgba(74,244,154,.3),0 10px 30px rgba(74,244,154,.2)}
-.btn-green:hover{transform:translateY(-1px);filter:brightness(1.05)}
-.btn-dark{background:#12162b;border:1px solid #242a4a;color:white}
-.card{margin:34px auto 0;max-width:1100px;background:rgba(18,22,43,.86);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:18px 20px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;backdrop-filter:blur(12px);position:relative;z-index:2}
-.card b{color:white;font-weight:700}
-.card .muted{opacity:.6}
-.codebox{max-width:1100px;margin:20px auto;padding:0 24px;position:relative;z-index:2}
-pre{background:#0e1120;border:1px solid #1e2440;border-radius:16px;padding:18px;overflow:auto;color:#cbd5e1}
-a{color:#7dd3fc}
+body { margin:0; background:#0a0a1a; color:#fff; font-family: -apple-system, sans-serif; }
+.hero { min-height:100vh; padding:60px 40px; background: radial-gradient(ellipse at top, #1a1a3a 0%, #0a0a1a 70%); }
+.badge { display:inline-block; border:1px solid #5a5aff; color:#8a8aff; padding:6px 14px; border-radius:20px; font-size:12px; letter-spacing:1px; margin-bottom:20px; }
+h1 { font-size: clamp(36px, 8vw, 72px); line-height:0.9; margin:0; font-weight:900; }
+.sub { color:#aaa; max-width:600px; margin:20px 0 30px; line-height:1.5; }
+.cta-row { display:flex; gap:16px; flex-wrap:wrap; }
+.btn-green { background:#00ff88; color:#000; padding:16px 28px; border-radius:12px; font-weight:800; text-decoration:none; display:inline-block; }
+.btn-blue { background:#1e1e3a; color:#fff; border:1px solid #444; padding:16px 28px; border-radius:12px; font-weight:800; text-decoration:none; display:inline-block; }
+.btn-blue:hover { background:#2a2a5a; }
+.top { display:flex; justify-content:space-between; align-items:start; }
+.verified { border:1px solid #00ff88; color:#00ff88; padding:8px 14px; border-radius:20px; font-size:12px; }
 </style>
 </head>
 <body>
-<canvas id="swarm"></canvas>
-<div class="top mono">
-  <div class="brand">NAVIER-SWARM // <br>MERIDA.MX</div>
-  <div style="display:flex;align-items:center">
-    <div class="badge-lean"><span>Lean4</span><span>VERIFIED ✓</span></div>
-    <div class="lang"><button class="on" onclick="setLang('en')">EN</button><button class="off" onclick="setLang('es')">ES</button></div>
-  </div>
-</div>
 <div class="hero">
-  <div class="pill mono">FORMALLY VERIFIED SWARM • 100 AGENTS</div>
-  <h1 id="h1"><span>100 agents.</span><span>0 collisions.</span><span>Mathematically</span><span>proven.</span></h1>
-  <div class="desc" id="d1">Not a simulation. A theorem checked by the Lean 4 kernel. Built in Rust + Tokio + Macroquad. From Mérida, Yucatán.</div>
-  <div class="desc2" id="d2">Your swarm doesn't need more tests. It needs a proof.</div>
-  <div class="btns">
-    <a class="btn btn-green" href="https://github.com/rodrigo-hernandez-ramirez/navier-swarm-rs" target="_blank">View Proof on GitHub →</a>
-    <a class="btn btn-dark" href="https://github.com/rodrigo-hernandez-ramirez/navier-swarm-rs#verify" target="_blank"><a href="https://mpago.la/1YmGoxL" target="_blank">VERIFY MY SWARM - $85 USD →
-  </div>
+<div class="top">
+<div>NAVIER-SWARM // <br>MERIDA.MX</div>
+<div class="verified">Lean4 VERIFIED ✓</div>
 </div>
-<div class="card mono" style="font-size:13px">
-  <div><span class="muted">Theorem</span><br><b style="color:white">swarm_stable 100</b></div>
-  <div style="text-align:right"><span style="color:#4ade80">swarm_stable 100</span><br><span class="muted">Kernel</span> Lean 4.12.0</div>
-  <div style="flex-basis:100%;margin-top:6px;color:#e2e8f0">Proof hash: d5602ae8f19c23b... | Build: 31 crates 11.8MiB in 18.69s | MacBook Pro de Rodrigo - 2026-09-09</div>
+
+<div class="badge">FORMALLY VERIFIED SWARM • 100 AGENTS</div>
+<h1>100 agents.<br>0 collisions.<br>Mathematically<br>proven.</h1>
+
+<p class="sub">Not a simulation. A theorem checked by the Lean 4 kernel. Built in Rust + Tokio + Macroquad. From Mérida, Yucatán.<br><br>Your swarm doesn't need more tests. It needs a proof.</p>
+
+<div class="cta-row">
+<a class="btn-green" href="https://github.com/rodrigo-hernandez-ramirez/navier-swarm-rs" target="_blank">View Proof on GitHub →</a>
+<a class="btn-blue" href="https://mpago.la/1YmGoxL" target="_blank">VERIFY MY SWARM - $85 USD →</a>
 </div>
-<div class="codebox mono">
-<pre>git clone https://github.com/rodrigo-hernandez-ramirez/navier-swarm-rs
-cd navier-swarm-rs
-cargo run --release  # 100 agents, Tokio tasks + Macroquad viz
-# v_new = v_old + (F_target + F_fluid + F_swarm) * dt</pre>
 </div>
-<script>
-// language toggle
-function setLang(l){
-  document.querySelectorAll('.lang button').forEach(b=>b.className=b.textContent.toLowerCase()===l?'on':'off');
-  if(l==='es'){
-    document.getElementById('d1').textContent='No es una simulación. Es un teorema verificado por el kernel de Lean 4. Hecho en Rust + Tokio + Macroquad. Desde Mérida, Yucatán.';
-    document.getElementById('d2').textContent='Tu swarm no necesita más tests. Necesita una prueba matemática.';
-    document.getElementById('h1').innerHTML='<span>100 agentes.</span><span>0 colisiones.</span><span>Matemáticamente</span><span>probado.</span>';
-  }else{
-    document.getElementById('d1').textContent='Not a simulation. A theorem checked by the Lean 4 kernel. Built in Rust + Tokio + Macroquad. From Mérida, Yucatán.';
-    document.getElementById('d2').textContent='Your swarm doesn\'t need more tests. It needs a proof.';
-    document.getElementById('h1').innerHTML='<span>100 agents.</span><span>0 collisions.</span><span>Mathematically</span><span>proven.</span>';
-  }
-}
-// swarm animation
-const c=document.getElementById('swarm'),x=c.getContext('2d');let W,H,ps=[];
-function R(){W=c.width=innerWidth;H=c.height=innerHeight}addEventListener('resize',R);R();
-for(let i=0;i<100;i++)ps.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.6,vy:(Math.random()-.5)*.6});
-(function loop(){
-  x.clearRect(0,0,W,H);
-  for(let p of ps){
-    let ax=0,ay=0;
-    for(let q of ps){let dx=p.x-q.x,dy=p.y-q.y,d2=dx*dx+dy*dy;if(d2>0&&d2<9000){let f=38/d2;ax+=dx*f;ay+=dy*f}}
-    ax+=(W*.55-p.x)*.00018;ay+=(H*.45-p.y)*.00018;
-    p.vx=(p.vx+ax)*.985;p.vy=(p.vy+ay)*.985;p.x+=p.vx;p.y+=p.vy;
-    x.fillStyle='rgba(125,211,252,.85)';x.beginPath();x.arc(p.x,p.y,1.9,0,6.283);x.fill();
-  }
-  requestAnimationFrame(loop);
-})();
-</script>
 </body>
 </html>
