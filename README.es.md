@@ -1,20 +1,12 @@
-# Navier-Swarm // Mérida.MX
-### 100 agentes. 0 colisiones. Matemáticamente probado.
+# NAVIER // Formal Swarm Verification
+### A prueba de colisiones. 100 agentes. Certificado en Lean 4.
 
 [🇺🇸 English](./README.md) | [🇲🇽 Español](./README.es.md)
 
 **Demo en vivo:** https://rodrigo-hernandez-ramirez.github.io/navier-swarm-rs/
 
-### ¿Qué es esto?
-Los enjambres fallan cuando chocan. Probar no es suficiente.
+No es simulación. Es un teorema verificado por Lean 4.
 
-**Navier-Swarm** es una prueba formal de que con nuestro protocolo, 100 agentes mantienen distancia mínima > 0.
+Desde Mérida, Yucatán 🇲🇽 - Para empresas de robótica global.
 
-Construido con Rust + Tokio y verificado con Lean 4. Desde Mérida, Yucatán 🇲🇽
-
-### ¿Por qué pagar $85 USD?
-1. Verificación de TU código de enjambre
-2. Certificado PDF con log de Lean 4
-3. Crate de Rust para integrar
-
-**Paga aquí:** https://mpago.la/1yWcADH - $1,699 MXN
+**Pagar y Verificar:** https://mpago.la/1yWcADH
