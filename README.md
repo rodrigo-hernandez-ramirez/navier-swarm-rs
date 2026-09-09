@@ -18,4 +18,4 @@ Physics-informed safety layer built on Navier-Stokes in Rust. Proves 2.14m safe 
 - **PRO $149/mo** - 300 drones, 3 certs (Best Seller)
 - **ENTERPRISE $499/mo** - 1000+ drones unlimited
 
-Contact: rodrigo@navier-swarm.com | +52 56 3504 9293
+Contact: rodhr0903@gmail.com | +52 56 3504 9293
