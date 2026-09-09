@@ -1,24 +1,75 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Navier-Swarm // Merida.MX</title>
-<style>body{margin:0;background:#0a0a14;color:#fff;font-family:-apple-system,sans-serif;overflow-x:hidden}#bg{position:fixed;inset:0;z-index:0}.hero{position:relative;z-index:1;min-height:100vh;padding:30px 40px;background:radial-gradient(1000px 500px at 20% 0%,rgba(26,26,74,0.6) 0%,transparent 70%)}h1{font-size:clamp(40px,8vw,84px);line-height:.9;margin:20px 0;font-weight:900}.sub{color:#aaa;max-width:620px;line-height:1.6}.cta{display:flex;gap:16px;flex-wrap:wrap;margin-top:24px}.btn-g{background:#00ff88;color:#000;padding:18px 26px;border-radius:14px;font-weight:900;text-decoration:none;display:inline-flex}.btn-b{background:#7c7cff;color:#fff;padding:18px 26px;border-radius:14px;font-weight:900;text-decoration:none;display:inline-flex}.lang{position:fixed;top:18px;right:18px;z-index:99;display:flex;gap:6px;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);padding:6px;border-radius:999px;border:1px solid rgba(255,255,255,0.15)}.lang button{background:transparent;color:#fff;border:0;padding:6px 12px;border-radius:999px;font-weight:800;font-size:12px;cursor:pointer}.lang button.active{background:#fff;color:#000}</style>
-</head><body>
-<canvas id="bg"></canvas>
-<div class="lang"><button id="btn-es" onclick="setLang('es')">ES</button><button id="btn-en" class="active" onclick="setLang('en')">EN</button></div>
-<div class="hero">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-top:40px"><div style="font-weight:800;font-size:12px">NAVIER-SWARM // MERIDA.MX</div><div style="border:1px solid #00ff88;color:#00ff88;padding:6px 12px;border-radius:999px;font-size:11px">Lean4 VERIFIED ✓</div></div>
-<h1 id="t1">100 agents.<br>0 collisions.<br>Mathematically<br>proven.</h1>
-<p class="sub" id="t2">Not a simulation. A theorem checked by the Lean 4 kernel. Built in Rust + Tokio. From Mérida, Yucatán.</p>
-<p class="sub" id="t3">Your swarm doesn't need more tests. It needs a proof.</p>
-<div class="cta"><a class="btn-g" href="https://github.com/rodrigo-hernandez-ramirez/navier-swarm-rs" target="_blank" id="b1">View Proof on GitHub →</a><a class="btn-b" href="https://mpago.la/1YmGoxL" target="_blank" id="b2">VERIFY MY SWARM - $85 USD →</a></div>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NAVIER // Formal Swarm Verification | Proven collision-free</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e1a;color:#fff;font-family:ui-monospace,monospace;overflow:hidden}
+canvas{position:absolute;top:0;left:0;width:100%;height:100%}
+.content{position:relative;z-index:2;padding:60px 40px;max-width:900px}
+.badge{border:1px solid #00ff88;color:#00ff88;padding:6px 14px;border-radius:20px;font-size:12px;display:inline-block;margin-bottom:20px}
+h1{font-size:64px;line-height:0.9;margin-bottom:20px;text-transform:uppercase}
+h1 span{display:block}
+p{color:#a0aec0;max-width:600px;margin-bottom:12px;line-height:1.5}
+.btn{display:inline-block;padding:16px 28px;border-radius:12px;font-weight:bold;text-decoration:none;margin-top:12px;margin-right:10px;transition:0.2s}
+.btn-green{background:#00ff88;color:#000}
+.btn-blue{background:#6366f1;color:#fff}
+.lang{position:absolute;top:20px;right:20px;z-index:10;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:30px;padding:4px;display:flex;gap:4px}
+.lang button{border:0;padding:8px 16px;border-radius:20px;cursor:pointer;background:transparent;color:#fff;font-weight:bold}
+.lang button.active{background:#fff;color:#000}
+.top{font-size:12px;letter-spacing:2px;color:#fff;margin-bottom:20px;display:flex;justify-content:space-between}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="lang"><button id="btn-es" class="active" onclick="setLang('es')">ES</button><button id="btn-en" onclick="setLang('en')">EN</button></div>
+<div class="content">
+<div class="top"><span>NAVIER // Formal Swarm Verification</span><span class="badge">Lean4 VERIFIED ✓</span></div>
+<h1 id="title"><span>100 agentes.</span><span>0 colisiones.</span><span>Matemáticamente</span><span>probado.</span></h1>
+<p id="desc1">No es una simulación. Es un teorema verificado por el kernel de Lean 4. Construido en Rust + Tokio. Desde Mérida, Yucatán.</p>
+<p id="desc2">Tu enjambre no necesita más tests. Necesita una prueba.</p>
+<a id="btn1" class="btn btn-green" href="https://github.com/rodrigo-hernandez-ramirez/navier-swarm-rs" target="_blank">Ver Prueba en GitHub →</a>
+<a id="btn2" class="btn btn-blue" href="https://mpago.la/1yWcADH" target="_blank">VERIFICAR MI ENJAMBRE - $85 USD →</a>
 </div>
 <script>
-// Puntitos atras
-const c=document.getElementById('bg'),x=c.getContext('2d');let w,h,dots=[];
-function resize(){w=c.width=innerWidth;h=c.height=innerHeight}addEventListener('resize',resize);resize();
-for(let i=0;i<80;i++)dots.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-0.5)*0.6,vy:(Math.random()-0.5)*0.6,r:Math.random()*2+1});
-(function anim(){x.clearRect(0,0,w,h);x.fillStyle='#5a5aff';dots.forEach(d=>{d.x+=d.vx;d.y+=d.vy;if(d.x<0||d.x>w)d.vx*=-1;if(d.y<0||d.y>h)d.vy*=-1;x.beginPath();x.arc(d.x,d.y,d.r,0,Math.PI*2);x.fill();});dots.forEach((a,i)=>{dots.slice(i+1).forEach(b=>{let dx=a.x-b.x,dy=a.y-b.y,dist=Math.hypot(dx,dy);if(dist<120){x.strokeStyle=`rgba(90,90,255,${0.15*(1-dist/120)})`;x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke();}})});requestAnimationFrame(anim)})();
-// Idioma
-const dict={en:{t1:"100 agents.<br>0 collisions.<br>Mathematically<br>proven.",t2:"Not a simulation. A theorem checked by the Lean 4 kernel. Built in Rust + Tokio. From Mérida, Yucatán.",t3:"Your swarm doesn't need more tests. It needs a proof.",b1:"View Proof on GitHub →",b2:"VERIFY MY SWARM - $85 USD →"},es:{t1:"100 agentes.<br>0 colisiones.<br>Matemáticamente<br>probado.",t2:"No es una simulación. Es un teorema verificado por el kernel de Lean 4. Construido en Rust + Tokio. Desde Mérida, Yucatán.",t3:"Tu enjambre no necesita más tests. Necesita una prueba.",b1:"Ver Prueba en GitHub →",b2:"VERIFICAR MI ENJAMBRE - $85 USD →"}};
-function setLang(l){document.getElementById('t1').innerHTML=dict[l].t1;document.getElementById('t2').innerHTML=dict[l].t2;document.getElementById('t3').innerHTML=dict[l].t3;document.getElementById('b1').innerHTML=dict[l].b1;document.getElementById('b2').innerHTML=dict[l].b2;document.getElementById('btn-en').className=l=='en'?'active':'';document.getElementById('btn-es').className=l=='es'?'active':'';localStorage.setItem('lang',l)}setLang(localStorage.getItem('lang')||'en');
+const txt={
+es:{title:"<span>100 agentes.</span><span>0 colisiones.</span><span>Matemáticamente</span><span>probado.</span>",d1:"No es una simulación. Es un teorema verificado por el kernel de Lean 4. Construido en Rust + Tokio. Desde Mérida, Yucatán.",d2:"Tu enjambre no necesita más tests. Necesita una prueba.",b1:"Ver Prueba en GitHub →",b2:"VERIFICAR MI ENJAMBRE - $85 USD →"},
+en:{title:"<span>100 agents.</span><span>0 collisions.</span><span>Mathematically</span><span>proven.</span>",d1:"Not a simulation. A theorem checked by the Lean 4 kernel. Built with Rust + Tokio. From Mérida, Yucatán, MX.",d2:"Your swarm doesn't need more tests. It needs a proof.",b1:"See Proof on GitHub →",b2:"VERIFY MY SWARM - $85 USD →"}
+};
+function setLang(l){
+localStorage.setItem('lang',l);
+document.getElementById('btn-es').classList.toggle('active',l==='es');
+document.getElementById('btn-en').classList.toggle('active',l==='en');
+document.getElementById('title').innerHTML=txt[l].title;
+document.getElementById('desc1').innerText=txt[l].d1;
+document.getElementById('desc2').innerText=txt[l].d2;
+document.getElementById('btn1').innerText=txt[l].b1;
+document.getElementById('btn2').innerText=txt[l].b2;
+}
+setLang(localStorage.getItem('lang')||'es');
+// swarm canvas simple
+const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+function resize(){canvas.width=innerWidth;canvas.height=innerHeight}resize();window.onresize=resize;
+let agents=[...Array(100)].map(()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:(Math.random()-0.5)*0.5,vy:(Math.random()-0.5)*0.5}));
+function loop(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle='#1e40af';
+agents.forEach(a=>{
+a.x+=a.vx;a.y+=a.vy;
+if(a.x<0||a.x>canvas.width)a.vx*=-1;
+if(a.y<0||a.y>canvas.height)a.vy*=-1;
+ctx.beginPath();ctx.arc(a.x,a.y,2,0,Math.PI*2);ctx.fill();
+});
+agents.forEach((a,i)=>{
+for(let j=i+1;j<agents.length;j++){
+let b=agents[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.hypot(dx,dy);
+if(d<80){ctx.strokeStyle=`rgba(99,102,241,${0.2*(1-d/80)})`;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}
+}
+});
+requestAnimationFrame(loop);
+}loop();
 </script>
-</body></html>
+</body>
+</html>
