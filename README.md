@@ -3,7 +3,7 @@
 
 **Certified collision-free coordination for 100+ drones in GPS-denied environments.**
 
-🌐 **Live Demo:** https://hernandez-ramirez.github.io/navier-swarm-rs/
+🌐 **Live Demo:** https://navier-swarm.github.io/navier-swarm-rs/
 💻 **Code:** https://github.com/navier-swarm/navier-swarm-rs
 
 ### The Problem
