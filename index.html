@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>NAVIER-SWARM // Formally Verified</title>
+<style>
+:root{--bg:#070a12;--card:#11162a;--accent:#3dff9a;--accent2:#7aa8ff;--text:#eef2ff;--muted:#98a2c0}
+*{box-sizing:border-box} body{margin:0;background:radial-gradient(1200px 600px at 20% 
+-10%,#1a2550 0%,var(--bg) 60%),var(--bg);color:var(--text);font-family:-apple-system,Inter,Segoe 
+UI,Roboto,sans-serif}
+.wrap{max-width:1060px;margin:0 auto;padding:28px 18px 60px}
+.nav{display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:900;letter-spacing:.12em;font-size:13px}
+.badge{border:1px solid #23315f;background:#0d1330;border-radius:999px;padding:6px 
+12px;font-size:11px;color:var(--accent);font-family:monospace}
+.lang button{background:#11162a;border:1px solid #222c55;color:#98a2c0;padding:8px 
+12px;border-radius:10px;cursor:pointer;font-weight:600}
+.lang button.active{background:#eef2ff;color:#080b14}
+.hero{margin-top:28px;display:grid;grid-template-columns:1.15fr.85fr;gap:22px}
+h1{font-size:52px;line-height:.92;letter-spacing:-.03em;margin:10px 0 14px}
+.sub{color:#98a2c0;font-size:17px;line-height:1.5}
+.card{background:linear-gradient(180deg,#151c3a,#0f1430);border:1px solid 
+#212d61;border-radius:20px;padding:18px}
+.mono{font-family:ui-monospace,Menlo,monospace}
+.proof.hash{font-size:12px;color:#3dff9a;word-break:break-all;background:#081a14;border:1px 
+solid #184a36;padding:10px;border-radius:12px;margin-top:10px}
+.video{aspect-ratio:16/10;background:#080b16;border:1px dashed 
+#2a376f;border-radius:16px;display:flex;align-items:center;justify-content:center;color:#98a2c0;text-align:center;padding:18px}
+.btn{border:0;border-radius:14px;padding:14px 
+18px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;justify-content:center}
+.btn-primary{background:#3dff9a;color:#052015}.btn-ghost{background:#11162a;border:1px solid 
+#26346e;color:#eef2ff}
+.pricing{margin-top:38px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.price{background:#11162a;border:1px solid #22306a;border-radius:18px;padding:18px}
+.price.amt{font-size:28px;font-weight:900;margin:8px 0}
+.price ul{color:#98a2c0;font-size:14px}
+.foot{margin-top:40px;color:#98a2c0;font-size:12px;text-align:center}
+@media(max-width:860px){.hero,.pricing{grid-template-columns:1fr} h1{font-size:38px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="nav">
+<div class="logo">NAVIER-SWARM // MERIDA.MX</div>
+<div style="display:flex;gap:12px;align-items:center">
+<div class="badge">Lean4 VERIFIED ✓</div>
+<div class="lang"><button id="btn-en" class="active" onclick="setLang('en')">EN</button><button 
+id="btn-es" onclick="setLang('es')">ES</button></div>
+</div>
+</div>
+<div class="hero">
+<div>
+<div style="display:inline-block;background:#10213f;border:1px solid 
+#22406f;color:#7aa8ff;border-radius:999px;padding:4px 10px;font-size:11px;font-weight:700" 
+id="tag">FORMALLY VERIFIED SWARM • 100 AGENTS</div>
+<h1 id="h1">100 agents.<br>0 collisions.<br>Mathematically proven.</h1>
+<p class="sub" id="sub">Not a simulation. A theorem checked by the Lean 4 kernel. Built in Rust 
++ Tokio + Macroquad. From Mérida, Yucatán.<br><br>Your swarm doesn't need more tests. It needs a 
+proof.</p>
+<div style="margin-top:18px;display:flex;gap:12px;flex-wrap:wrap">
+<a class="btn btn-primary" 
+href="https://github.com/rodrigo-hernandez-ramirez/navier-swarm-verificado" target="_blank" 
+id="cta1">View Proof on GitHub →</a>
+<a class="btn btn-ghost" href="#pricing" id="cta2">Verify My Swarm $49</a>
+</div>
+<div class="card" style="margin-top:18px"><div 
+style="display:flex;justify-content:space-between;font-size:13px;color:#98a2c0"><span>Theorem</span><span 
+style="color:#3dff9a">swarm_stable 100</span></div><div 
+style="display:flex;justify-content:space-between;font-size:13px;color:#98a2c0"><span>Kernel</span><span>Lean 
+4.12.0</span></div><div class="hash">Proof hash: d5602ae8f19c23b... | Build: 31 crates 11.8MiB 
+in 18.69s | MacBook Pro de Rodrigo - 2026-09-09</div></div>
+</div>
+<div><div class="card"><div class="video">REEMPLAZA ESTO<br>con tu demo.mp4<br><br><span 
+style="color:#3dff9a" class="mono">NAVIER-SWARM 100 AGENTES [ESTABLE]</span></div><div 
+style="margin-top:12px;font-size:12px;color:#98a2c0" class="mono">✓ 100 green dots ✓ 60fps ✓ 
+0 collisions<br>✓ Finished dev profile ✓ Merida</div></div></div>
+</div>
+<div class="pricing" id="pricing">
+<div class="price"><h3>DEV</h3><div class="amt">$49</div><div style="color:#98a2c0" id="p1d">100 
+verifications</div><ul id="p1l"><li>Formal certificate</li><li>GitHub access</li></ul><a 
+class="btn btn-ghost" style="width:100%;margin-top:12px" 
+href="mailto:rodrigo@navier-swarm.mx?subject=DEV">Get DEV →</a></div>
+<div class="price" style="border-color:#3dff9a"><h3 id="p2t">AGRO YUCATAN ⭐</h3><div 
+class="amt">$1,500 + $299/mo</div><div style="color:#98a2c0" id="p2d">Simulamos TU 
+campo</div><ul><li>Video custom</li><li>Certificado anti-colisión</li><li>WhatsApp</li></ul><a 
+class="btn btn-primary" style="width:100%;margin-top:12px" 
+href="https://wa.me/529999999999?text=Quiero%20Navier-Swarm">WhatsApp →</a></div>
+<div class="price"><h3>ENTERPRISE API</h3><div class="amt">$1,200/mo</div><div 
+style="color:#98a2c0">Unlimited + FAA report</div><ul><li>POST /verify API</li><li>PDF 
+formal</li></ul><a class="btn btn-ghost" style="width:100%;margin-top:12px" 
+href="mailto:rodrigo@navier-swarm.mx?subject=ENTERPRISE">Request API →</a></div>
+</div>
+<div class="foot mono">Built by Rodrigo Hernández Ramírez // cargo run // Lean4 Verified // 
+Mérida, Yucatán - 2026</div>
+</div>
+<script>
+const i18n={en:{tag:"FORMALLY VERIFIED SWARM • 100 AGENTS",h1:"100 agents.<br>0 
+collisions.<br>Mathematically proven.",sub:"Not a simulation. A theorem checked by Lean 4 
+kernel. Built in Rust + Tokio + Macroquad. From Mérida, Yucatán.<br><br>Your swarm doesn't need 
+more tests. It needs a proof.",cta1:"View Proof on GitHub →",cta2:"Verify My Swarm 
+$49"},es:{tag:"ENJAMBRE VERIFICADO • 100 AGENTES",h1:"100 agentes.<br>0 
+colisiones.<br>Matemáticamente probado.",sub:"No es simulación. Es un teorema verificado por el 
+kernel de Lean 4. Hecho en Rust + Tokio + Macroquad. Desde Mérida, Yucatán.<br><br>Tu enjambre 
+no necesita más pruebas. Necesita una demostración.",cta1:"Ver Prueba en GitHub 
+→",cta2:"Verifica Mi Enjambre $49"}};
+function 
+setLang(l){localStorage.setItem('lang',l);document.getElementById('btn-en').classList.toggle('active',l==='en');document.getElementById('btn-es').classList.toggle('active',l==='es');const 
+t=i18n[l];for(const k in t){const 
+el=document.getElementById(k);if(el)el.innerHTML=t[k];}}setLang(localStorage.getItem('lang')||'en');
+</script>
+</body>
+</html>
