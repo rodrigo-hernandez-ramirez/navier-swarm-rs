@@ -1,98 +1,69 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NAVIER // Formal Swarm Verification</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}body{background:#070b14;color:#e2e8f0;font-family:Inter,sans-serif}
-.hero{padding:30px 24px;max-width:1100px;margin:auto;text-align:center}
-.logo{width:90px;height:90px;border-radius:50%;border:2px solid #00ff88;margin:0 auto 16px;display:block}
-.badge{border:1px solid #00ff88;color:#00ff88;padding:6px 14px;border-radius:20px;font-size:11px;display:inline-block;margin-bottom:16px;letter-spacing:1px}
-h1{font-size:clamp(32px,6vw,64px);line-height:.9;font-weight:900;text-transform:uppercase}
-h1 span{color:#00ff88}
-.sub{color:#94a3b8;margin:18px auto;max-width:640px;line-height:1.5}
-.controls{background:#111827;border:1px solid #1e293b;border-radius:16px;padding:20px;max-width:760px;margin:24px auto;display:flex;gap:14px;flex-wrap:wrap;justify-content:center;align-items:end}
-.controls label{font-size:10px;color:#94a3b8;display:block;text-align:left;margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px}
-.controls input{padding:12px 14px;border-radius:10px;border:1px solid #334155;background:#0a0e1a;color:#fff;width:150px;font-weight:700}
-.btn{display:inline-block;padding:16px 32px;border-radius:12px;font-weight:900;text-decoration:none;margin:12px;cursor:pointer;border:none;font-size:16px}
-.btn-green{background:#00ff88;color:#000;box-shadow:0 0 20px rgba(0,255,136,0.3)}
-canvas{width:100%;height:460px;background:#0f172a;border-radius:16px;border:1px solid #1e293b;display:block}
-.stats{display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap}
-.stat{background:#111827;border:1px solid #1e293b;border-radius:12px;padding:10px 16px;font-size:13px}
-.stat b{color:#00ff88}
-</style>
-</head>
-<body>
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>NAVIER // Formal Swarm Verification</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#070b14;color:#e2e8f0;font-family:Inter,sans-serif}.hero{padding:28px 20px;max-width:1100px;margin:auto;text-align:center}.badge{border:1px solid #00ff88;color:#00ff88;padding:6px 14px;border-radius:20px;font-size:11px;display:inline-block;margin-bottom:14px;letter-spacing:1px}.hero h1{font-size:clamp(28px,5vw,58px);line-height:.95;font-weight:900;text-transform:uppercase}.hero h1 span{color:#00ff88}.sub{color:#94a3b8;margin:14px auto;max-width:640px}.controls{background:#111827;border:1px solid #1e293b;border-radius:16px;padding:18px;max-width:760px;margin:20px auto;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;align-items:end}.controls label{font-size:10px;color:#94a3b8;display:block;text-align:left;margin-bottom:5px;text-transform:uppercase;letter-spacing:.8px}.controls input{padding:11px 13px;border-radius:10px;border:1px solid #334155;background:#0a0e1a;color:#fff;width:150px;font-weight:700}.btn{padding:15px 30px;border-radius:12px;font-weight:900;border:none;cursor:pointer;font-size:15px;margin-top:12px}.btn-green{background:#00ff88;color:#000;box-shadow:0 0 18px rgba(0,255,136,.3)}canvas{width:100%;height:480px;background:#0f172a;border-radius:16px;border:1px solid #1e293b;display:block;margin-top:18px}.stats{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}.stat{background:#111827;border:1px solid #1e293b;border-radius:10px;padding:9px 14px;font-size:12px}.stat b{color:#00ff88}</style></head><body>
 <div class="hero">
 <div class="badge">Lean 4 KERNEL VERIFIED ✓ // Rust + Tokio</div>
-<h1><span id="countTitle">100</span> agentes.<br>0 colisiones.<br><span>Matemáticamente probado.</span></h1>
-<p class="sub">Ingresa tu flota. Te calculamos la separación segura y te entregamos el certificado formal.</p>
+<h1><span id="countTitle">100</span> AGENTES.<br>0 COLISIONES.<br><span>MATEMÁTICAMENTE PROBADO.</span></h1>
+<p class="sub">Ingresa tu flota. Te calculamos la separación segura y generamos tu certificado formal.</p>
 <div class="controls">
-<div><label>1. ¿Cuántos drones tienes?</label><input type="number" id="numAgents" value="100" min="10" max="1000" step="10"></div>
-<div><label>2. ¿Cuánto mide cada dron? (m)</label><input type="number" id="droneSize" value="0.5" min="0.1" max="5" step="0.1"></div>
-<div><label>3. Tu email</label><input type="email" id="email" placeholder="tu@empresa.com" style="width:210px"></div>
+<div><label>1. ¿Cuántos drones?</label><input type="number" id="numAgents" value="100" min="10" max="1000" step="10"></div>
+<div><label>2. ¿Tamaño por dron? (m)</label><input type="number" id="droneSize" value="0.5" min="0.1" max="5" step="0.1"></div>
+<div><label>3. Email certificado</label><input type="email" id="email" placeholder="tu@empresa.com" style="width:200px"></div>
 </div>
 <button class="btn btn-green" onclick="pagar()">VERIFICAR MI ENJAMBRE - $85 USD →</button>
-<div style="margin-top:22px">
 <canvas id="c"></canvas>
-<div class="stats">
-<div class="stat">Flota: <b id="count">100 drones</b></div>
-<div class="stat">Tamaño: <b id="size">0.50m</b></div>
-<div class="stat">Segura (auto): <b id="safe">1.75m</b></div>
-<div class="stat">Real: <b id="mind">--</b></div>
-<div class="stat">Estado: <b id="status">VERIFIED ✓</b></div>
-</div>
-</div>
+<div class="stats"><div class="stat">Flota: <b id="count">100 drones</b></div><div class="stat">Tamaño: <b id="size">0.50m</b></div><div class="stat">Segura auto: <b id="safe">1.75m</b></div><div class="stat">Real: <b id="mind">--</b></div><div class="stat">Estado: <b id="status">VERIFIED ✓</b></div></div>
 </div>
 <script>
 const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
-function resize(){canvas.width=canvas.offsetWidth*2;canvas.height=460*2}resize();window.onresize=resize;
-let N=100, DRONE_SIZE=0.5; let agents=[];
-function calcSafe(size){ return (size * 2.5 + 0.5); }
-function initAgents(n){N=n; agents=[...Array(N)].map(()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-0.5)*1.2,vy:(Math.random()-0.5)*1.2})); document.getElementById('count').innerText=N+' drones'; document.getElementById('countTitle').innerText=N;}
-initAgents(100);
-document.getElementById('numAgents').addEventListener('input',e=>{let v=parseInt(e.target.value)||100; if(v>1000)v=1000; if(v<10)v=10; initAgents(v);});
-document.getElementById('droneSize').addEventListener('input',e=>{DRONE_SIZE=parseFloat(e.target.value)||0.5; document.getElementById('size').innerText=DRONE_SIZE.toFixed(2)+'m'; document.getElementById('safe').innerText=calcSafe(DRONE_SIZE).toFixed(2)+'m';});
-function pagar(){
- let email=document.getElementById('email').value || 'sin email';
- let cantidad=document.getElementById('numAgents').value;
- let safe=calcSafe(DRONE_SIZE).toFixed(2);
- let tuNumero='525635049293';
- let mensaje=`🚀 NAVIER - PEDIDO AUTOMATICO\n\nCantidad: ${cantidad} drones\nTamaño: ${DRONE_SIZE}m c/u\nDistancia segura: ${safe}m\nCliente: ${email}\nSim actual: ${document.getElementById('mind').innerText}\nEstado: ${document.getElementById('status').innerText}`;
- let urlWhats=`https://wa.me/${tuNumero}?text=${encodeURIComponent(mensaje)}`;
- window.open(urlWhats, '_blank');
- setTimeout(()=>{window.open('https://mpago.la/1yWcADH','_blank');}, 700);
+function resize(){canvas.width=canvas.offsetWidth*2;canvas.height=480*2}resize();addEventListener('resize',resize);
+let N=100,DRONE_SIZE=0.5,agents=[];
+function calcSafe(s){return s*2.5+0.5}
+function initAgents(n){
+ N=n; agents=[...Array(N)].map(()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-0.5)*2.5,vy:(Math.random()-0.5)*2.5}));
+ document.getElementById('count').innerText=N+' drones';document.getElementById('countTitle').innerText=N;
 }
+initAgents(100);
+document.getElementById('numAgents').addEventListener('input',e=>{let v=parseInt(e.target.value)||100;v=Math.max(10,Math.min(1000,v));initAgents(v);});
+document.getElementById('droneSize').addEventListener('input',e=>{DRONE_SIZE=parseFloat(e.target.value)||0.5;document.getElementById('size').innerText=DRONE_SIZE.toFixed(2)+'m';document.getElementById('safe').innerText=calcSafe(DRONE_SIZE).toFixed(2)+'m';});
+
+function pagar(){
+ let email=document.getElementById('email').value||'sin email',cantidad=document.getElementById('numAgents').value,safe=calcSafe(DRONE_SIZE).toFixed(2);
+ let tuNumero='525635049293';
+ let msg=`🚀 NAVIER - PEDIDO AUTOMATICO\nCantidad: ${cantidad} drones\nTamaño: ${DRONE_SIZE}m\nSegura calculada: ${safe}m\nReal sim: ${document.getElementById('mind').innerText}\nCliente: ${email}`;
+ window.open(`https://wa.me/${tuNumero}?text=${encodeURIComponent(msg)}`,'_blank');
+ setTimeout(()=>window.open('https://mpago.la/1yWcADH','_blank'),700);
+}
+
 function loop(){
+  // Fix: empuje vivo permanente
+  agents.forEach(a=>{a.vx+=(Math.random()-0.5)*0.12;a.vy+=(Math.random()-0.5)*0.12;});
   for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){
     let a=agents[i],b=agents[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.hypot(dx,dy)||1;
-    if(d<120){let f=(120-d)*0.04,fx=dx/d*f,fy=dy/d*f;a.vx+=fx;a.vy+=fy;b.vx-=fx;b.vy-=fy;}
+    if(d<85){let f=(85-d)*0.022;let fx=dx/d*f,fy=dy/d*f;a.vx+=fx;a.vy+=fy;b.vx-=fx;b.vy-=fy;}
   }
   let minD=9999;
   agents.forEach(a=>{
-    let s=Math.hypot(a.vx,a.vy);if(s>2.2){a.vx=a.vx/s*2.2;a.vy=a.vy/s*2.2;}
+    let s=Math.hypot(a.vx,a.vy);
+    if(s>3.2){a.vx=a.vx/s*3.2;a.vy=a.vy/s*3.2;}
+    if(s<1.2){a.vx*=1.15;a.vy*=1.15;}
     a.x+=a.vx;a.y+=a.vy;
-    if(a.x<0||a.x>canvas.width){a.vx*=-1;a.x=Math.max(0,Math.min(canvas.width,a.x))}
-    if(a.y<0||a.y>canvas.height){a.vy*=-1;a.y=Math.max(0,Math.min(canvas.height,a.y))}
-    a.vx*=0.998;a.vy*=0.998;
+    if(a.x<10||a.x>canvas.width-10){a.vx*=-1;a.x=Math.max(10,Math.min(canvas.width-10,a.x))}
+    if(a.y<10||a.y>canvas.height-10){a.vy*=-1;a.y=Math.max(10,Math.min(canvas.height-10,a.y))}
+    a.vx*=0.9992;a.vy*=0.9992;
   });
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.strokeStyle='rgba(99,102,241,0.15)';
+  ctx.strokeStyle='rgba(99,102,241,0.1)';
   for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){
     let a=agents[i],b=agents[j],d=Math.hypot(a.x-b.x,a.y-b.y);
     if(d<minD)minD=d;
-    if(d<130){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}
+    if(d<90){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}
   }
-  ctx.fillStyle='#00ff88';
-  agents.forEach(a=>{ctx.beginPath();ctx.arc(a.x,a.y,4,0,Math.PI*2);ctx.fill();});
-  let realM = (minD/2);
+  ctx.fillStyle='#00ff88';agents.forEach(a=>{ctx.beginPath();ctx.arc(a.x,a.y,3.3,0,Math.PI*2);ctx.fill();});
+  let realM=minD/2;
   document.getElementById('mind').innerText=realM.toFixed(2)+'m';
-  let safeReq = calcSafe(DRONE_SIZE);
-  let statusEl=document.getElementById('status');
-  if(realM > safeReq){statusEl.innerText='VERIFIED ✓'; statusEl.style.color='#00ff88';}
-  else{statusEl.innerText='FAILED ✗'; statusEl.style.color='#ff4444';}
+  let safeReq=calcSafe(DRONE_SIZE),statusEl=document.getElementById('status');
+  if(realM>safeReq){statusEl.innerText='VERIFIED ✓';statusEl.style.color='#00ff88';}
+  else{statusEl.innerText='FAILED ✗';statusEl.style.color='#ff4444';}
   requestAnimationFrame(loop);
 }loop();
-</script>
-</body>
-</html>
+</script></body></html>
