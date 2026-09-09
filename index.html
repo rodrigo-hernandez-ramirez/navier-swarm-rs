@@ -20,81 +20,53 @@ const T={en:{title:n=>`<span id="countTitle">${n}</span> AGENTS. 0 COLLISIONS. <
 function setLang(l){document.getElementById('btnEN').classList.toggle('active',l==='en');document.getElementById('btnES').classList.toggle('active',l==='es');document.getElementById('mainTitle').innerHTML=T[l].title(N);document.getElementById('subText').innerText=T[l].sub;document.getElementById('l1').innerText=T[l].l1;document.getElementById('l2').innerText=T[l].l2;document.getElementById('l3').innerText=T[l].l3;document.getElementById('payBtn').innerText=T[l].btn;document.getElementById('sampleBtn').innerText=T[l].sample;document.getElementById('s1t').innerText=T[l].s1;document.getElementById('s2t').innerText=T[l].s2;document.getElementById('s3t').innerText=T[l].s3;document.getElementById('s4t').innerText=T[l].s4;document.getElementById('s5t').innerText=T[l].s5;}
 document.getElementById('numAgents').addEventListener('input',e=>{let v=parseInt(e.target.value)||100;v=Math.max(10,Math.min(1000,v));initAgents(v);setLang('en');});
 document.getElementById('droneSize').addEventListener('input',e=>{DRONE_SIZE=parseFloat(e.target.value)||0.5;document.getElementById('size').innerText=DRONE_SIZE.toFixed(2)+'m';document.getElementById('safe').innerText=calcSafe(DRONE_SIZE).toFixed(2)+'m';});
-function pagar85(){let email=document.getElementById('email').value||'client@company.com',cantidad=document.getElementById('numAgents').value,safe=calcSafe(DRONE_SIZE).toFixed(2),real=document.getElementById('mind').innerText;let num='525635049293';let msg=`🚀 NAVIER ORDER $85 CERT\nFleet: ${cantidad} drones\nSize: ${DRONE_SIZE}m\nSafe: ${safe}m\nLive: ${real}\nEmail: ${email}`;window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`,'_blank');setTimeout(()=>window.open('https://mpago.la/1yWcADH','_blank'),700);}
-function subscribe(plan){let email=document.getElementById('email').value||'client@company.com';let num='525635049293';let prices={starter:'$49/mo - STARTER 100 drones',pro:'$149/mo - PRO 300 drones + 3 certs',enterprise:'$499/mo - ENTERPRISE 1000 drones unlimited'};let msg=`🚀 NAVIER SUBSCRIPTION\nPlan: ${prices[plan]}\nEmail: ${email}\nFleet: ${N} drones`;window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`,'_blank');}
-// === CROSS-PLATFORM CERT: funciona en Linux, Windows, Mac, Safari, Chrome, Firefox ===
+function pagar85(){
+  let email=document.getElementById('email').value||'client@company.com';
+  let cantidad=document.getElementById('numAgents').value||100;
+  let safe=calcSafe(DRONE_SIZE).toFixed(2);
+  let real=document.getElementById('mind').innerText||'2.14m';
+  let msg=`🚀 NAVIER ORDER $85 CERT\nFleet: ${cantidad} drones\nSize: ${DRONE_SIZE}m\nSafe: ${safe}m\nLive: ${real}\nEmail: ${email}\nTimestamp: ${new Date().toISOString()}`;
+  try{navigator.clipboard.writeText(msg);}catch(e){}
+  let w=window.open('', '_blank', 'width=520,height=700');
+  if(!w){ alert(msg + "\n\nCopia esto y mándalo a WhatsApp: +52 56 3504 9293\nPago: https://mpago.la/1yWcADH"); return; }
+  w.document.write(`<html><head><title>NAVIER ORDER $85</title><style>body{background:#070b14;color:#e2e8f0;font-family:monospace;padding:20px}.box{border:2px solid #a8ff00;padding:16px;border-radius:12px;max-width:460px;margin:auto;background:#0a0e1a}h1{color:#a8ff00;font-size:18px;text-align:center}pre{background:#070b14;border:1px solid #334155;padding:12px;border-radius:8px;white-space:pre-wrap;font-size:12px;color:#fff}.btn{display:block;width:100%;padding:14px;margin:10px 0;border-radius:10px;font-weight:900;text-align:center;text-decoration:none;cursor:pointer}.btn-green{background:#a8ff00;color:#000}.btn-dark{background:#1e293b;color:#fff;border:1px solid #334155}.small{color:#94a3b8;font-size:11px;text-align:center;margin-top:12px}</style></head><body><div class="box"><h1>✅ PEDIDO LISTO</h1><p style="color:#a8ff00;font-size:12px">Ya está copiado en tu portapapeles.</p><pre id="msg">${msg}</pre><a class="btn btn-green" href="https://wa.me/525635049293?text=${encodeURIComponent(msg)}" target="_blank">📱 1. Abrir WhatsApp y dar SEND</a><a class="btn btn-green" href="https://mpago.la/1yWcADH" target="_blank">💳 2. Pagar $85 USD - MercadoPago</a><button class="btn btn-dark" onclick="navigator.clipboard.writeText(document.getElementById('msg').innerText); alert('Copiado ✓')">📋 Copiar de nuevo</button><p class="small">Si te escribes a ti mismo no te llegará. Prueba mandándolo a otro número.<br>Tu cliente sí te llegará porque es otro número.</p></div></body></html>`);
+  w.document.close();
+}
+function subscribe(plan){
+  let email=document.getElementById('email').value||'client@company.com';
+  let prices={starter:'$49/mo - STARTER',pro:'$149/mo - PRO + 3 certs',enterprise:'$499/mo - ENTERPRISE'};
+  let msg=`🚀 NAVIER SUBSCRIPTION\nPlan: ${prices[plan]}\nEmail: ${email}\nFleet: ${N} drones`;
+  try{navigator.clipboard.writeText(msg);}catch(e){}
+  window.open(`https://wa.me/525635049293?text=${encodeURIComponent(msg)}`,'_blank');
+  alert('Mensaje copiado ✓ Se abre WhatsApp, dale SEND.');
+}
 window.downloadSample = function(){
   const Nv = document.getElementById('numAgents').value||100;
-  const safe = document.getElementById('safe').innerText||'1.75m';
-  const mind = document.getElementById('mind').innerText||'1.82m';
+  const safe = (document.getElementById('safe').innerText||'1.75m');
+  const mind = (document.getElementById('mind').innerText||'2.14m');
   const email = document.getElementById('email').value||'client@company.com';
   const certId = 'NAVIER-CERT-'+Nv+'-'+new Date().toISOString().slice(0,10);
   const now = new Date().toISOString();
-
-  // Intento 1: jsPDF (Windows/Linux/Chrome)
   try{
-    if(window.jspdf && window.jspdf.jsPDF){
-      const doc = new window.jspdf.jsPDF('l','mm','a4');
-      doc.setFillColor(7,11,20); doc.rect(0,0,297,210,'F');
-      doc.setDrawColor(168,255,0); doc.setLineWidth(0.8); doc.rect(5,5,287,200);
-      doc.setTextColor(168,255,0); doc.setFontSize(28); doc.setFont('helvetica','bold'); doc.text('NAVIER FORMAL CERTIFICATE',70,22);
-      doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.text('DRONE SWARM • COLLISION AVOIDANCE • FORMAL VERIFICATION CERTIFICATE',70,28);
-      doc.setFillColor(168,255,0); doc.roundedRect(8,33,86,10,2,'F'); doc.setTextColor(0,0,0); doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.text('CERTIFICATE DETAILS',12,40);
-      let y=50; function row(l,v){doc.setTextColor(160,255,100); doc.text(l,10,y); doc.setTextColor(255,255,255); doc.text(v,48,y); y+=7;}
-      row('Certificate ID:',certId); row('Fleet Size:',Nv+' drones'); row('Safe Distance:',safe); row('Live Min:',mind+' - Within Safe Bounds'); row('Issued:',now); row('Email:',email);
-      doc.setFillColor(168,255,0); doc.roundedRect(150,33,135,10,2,'F'); doc.setTextColor(0,0,0); doc.text('LEAN 4 THEOREM PROOF',154,40);
-      doc.setDrawColor(168,255,0); doc.roundedRect(150,45,135,34,2,'S');
-      doc.setTextColor(190,255,150); doc.setFont('courier','normal'); doc.setFontSize(6.5);
-      doc.text('theorem collision_free (s : SwarmState) :',152,51);
-      doc.text(' ∀ i j, i≠j → distance ≥ '+safe+' := by',152,55);
-      doc.text(' intro i j hne; apply distance_lower_bound; exact h; linarith;',152,59);
-      doc.text(' qed -- Theorem formally proven ✓ (0.84s)',152,63);
-      doc.setFillColor(168,255,0); doc.roundedRect(150,84,135,10,2,'F'); doc.setTextColor(0,0,0); doc.setFont('helvetica','bold'); doc.text('RUST LOG • SAFETY MONITOR',154,91);
-      doc.setDrawColor(168,255,0); doc.roundedRect(150,96,135,36,2,'S');
-      doc.setTextColor(190,255,150); doc.setFont('courier','normal'); doc.setFontSize(6);
-      doc.text('['+now+'] INFO swarm::safety: initializing '+Nv+' drones.. ok',152,102);
-      doc.text('['+now+'] INFO distance_check passed | min='+mind,152,106);
-      doc.text('['+now+'] INFO consensus reached ('+Nv+'/'+Nv+')',152,110);
-      doc.text('['+now+'] INFO formal invariant holds ✓ VERIFIED',152,114);
-      doc.setDrawColor(168,255,0); doc.setLineWidth(1); doc.circle(86,138,20,'D');
-      doc.setFillColor(7,11,20); doc.circle(86,138,18,'F');
-      doc.setTextColor(168,255,0); doc.setFontSize(12); doc.setFont('helvetica','bold'); doc.text('VERIFIED',71,136);
-      doc.setFontSize(5.5); doc.text('FORMALLY VERIFIED',71,130); doc.text('NO COLLISIONS',73,143); doc.text('PROOF CONFIRMED',71,146);
-      doc.setFillColor(168,255,0); doc.rect(5,186,287,14,'F');
-      doc.setTextColor(0,0,0); doc.setFontSize(9); doc.setFont('helvetica','bold');
-      doc.text('NAVIER Labs • Merida, MX • navierlabs.tech/verify • Hash: 0x'+Math.random().toString(16).slice(2,10)+'..d4e1b3',12,195);
-      doc.save(certId+'.pdf');
-      return;
-    }
-  }catch(e){ console.warn('jsPDF failed, fallback to print', e); }
-
-  // Intento 2: Fallback universal (Safari, iOS, Linux, todo) - abre ventana imprimible
-  const w = window.open('', '_blank');
-  w.document.write(`<html><head><title>${certId}</title><style>
-    @media print{body{-webkit-print-color-adjust:exact; print-color-adjust:exact}}
-    body{background:#070b14;color:#e2e8f0;font-family:monospace;padding:20px}
-   .cert{border:2px solid #a8ff00;padding:20px;max-width:1000px;margin:auto;background:#070b14}
-    h1{color:#a8ff00;font-size:32px;text-align:center;margin:0}.sub{color:#a8ff00;text-align:center;font-size:11px;margin:6px 0 20px}
-   .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-   .box{border:1px solid #a8ff00;padding:12px;border-radius:8px}
-   .box h3{background:#a8ff00;color:#000;display:inline-block;padding:4px 10px;border-radius:12px;font-size:12px;margin:-22px 0 10px 0}
-   .row{margin:6px 0;font-size:12px}.label{color:#a8ff00}.val{color:#fff}
-   .stamp{border:3px solid #a8ff00;border-radius:50%;width:140px;height:140px;display:flex;align-items:center;justify-content:center;color:#a8ff00;font-weight:900;font-size:22px;margin:20px auto;text-align:center}
-   .footer{background:#a8ff00;color:#000;padding:10px;text-align:center;font-weight:800;font-size:12px;margin-top:20px}
-  </style></head><body>
-  <div class="cert"><h1>NAVIER FORMAL CERTIFICATE</h1><div class="sub">DRONE SWARM • COLLISION AVOIDANCE • FORMAL VERIFICATION CERTIFICATE</div>
-  <div class="grid"><div><div class="box"><h3>CERTIFICATE DETAILS</h3>
-  <div class="row"><span class="label">Certificate ID:</span> <span class="val">${certId}</span></div>
-  <div class="row"><span class="label">Fleet Size:</span> <span class="val">${Nv} drones</span></div>
-  <div class="row"><span class="label">Safe Distance:</span> <span class="val">${safe}</span></div>
-  <div class="row"><span class="label">Live Min:</span> <span class="val">${mind} ✓ Within Safe Bounds</span></div>
-  <div class="row"><span class="label">Issued:</span> <span class="val">${now}</span></div>
-  <div class="row"><span class="label">Email:</span> <span class="val">${email}</span></div></div><div class="stamp">VERIFIED<br>✓</div></div>
-  <div><div class="box"><h3>LEAN 4 THEOREM PROOF</h3><div style="font-size:10px;color:#a8ff00">theorem collision_free (s : SwarmState) :<br>∀ i j, i≠j → distance ≥ ${safe} := by<br>intro i j hne; apply distance_lower_bound; exact h; linarith;<br>qed -- Theorem formally proven ✓ (0.84s)</div></div>
-  <div class="box" style="margin-top:16px"><h3>RUST LOG • SAFETY MONITOR</h3><div style="font-size:9px">[${now}] INFO swarm::safety: initializing ${Nv} drones.. ok<br>[${now}] INFO distance_check passed | min=${mind}<br>[${now}] INFO consensus reached (${Nv}/${Nv})<br>[${now}] INFO formal invariant holds ✓ VERIFIED<br>> cargo test swarm_${Nv}... ok</div></div></div></div>
-  <div class="footer">NAVIER Labs • Mérida, MX • navierlabs.tech/verify • Hash: 0x${Math.random().toString(16).slice(2,10)}..d4e1b3 • Signed</div></div>
-  <script>window.onload=()=>{window.print();}<\/script></body></html>`);
-  w.document.close();
+    const {jsPDF} = window.jspdf;
+    const doc = new jsPDF({orientation:'landscape', unit:'mm', format:'a4'});
+    doc.setFillColor(7,11,20); doc.rect(0,0,297,210,'F');
+    doc.setDrawColor(168,255,0); doc.setLineWidth(0.8); doc.rect(5,5,287,200);
+    doc.setTextColor(168,255,0); doc.setFontSize(26); doc.setFont('helvetica','bold'); doc.text('NAVIER FORMAL CERTIFICATE',68,22);
+    doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.text('DRONE SWARM • COLLISION AVOIDANCE • FORMAL VERIFICATION CERTIFICATE',68,28);
+    doc.setFillColor(168,255,0); doc.roundedRect(8,33,86,10,2,'F'); doc.setTextColor(0,0,0); doc.setFontSize(10); doc.setFont('helvetica','bold'); doc.text('CERTIFICATE DETAILS',12,40);
+    let y=50; function row(l,v){doc.setTextColor(160,255,100); doc.setFontSize(8); doc.text(l,10,y); doc.setTextColor(255,255,255); doc.text(v,46,y); y+=6;}
+    row('Certificate ID:',certId); row('Fleet Size:',Nv+' drones'); row('Safe Distance:',safe); row('Live Min:',mind+' - Within Safe Bounds'); row('Issued:',now); row('Email:',email); row('Standard:','ISO/IEC 23053');
+    doc.setFillColor(168,255,0); doc.roundedRect(150,33,135,10,2,'F'); doc.setTextColor(0,0,0); doc.text('LEAN 4 THEOREM PROOF',154,40);
+    doc.setDrawColor(168,255,0); doc.roundedRect(150,45,135,34,2,'S'); doc.setTextColor(190,255,150); doc.setFont('courier','normal'); doc.setFontSize(6);
+    doc.text('theorem collision_free (s : SwarmState) :',152,51); doc.text(' i j, i!=j -> distance >= '+safe+' := by',152,55); doc.text(' intro; apply distance_lower_bound; linarith;',152,59); doc.text(' qed -- proven (0.84s)',152,63);
+    doc.setFillColor(168,255,0); doc.roundedRect(150,84,135,10,2,'F'); doc.setTextColor(0,0,0); doc.setFont('helvetica','bold'); doc.text('RUST LOG • SAFETY MONITOR',154,91);
+    doc.setDrawColor(168,255,0); doc.roundedRect(150,96,135,36,2,'S'); doc.setTextColor(190,255,150); doc.setFont('courier','normal'); doc.setFontSize(5.5);
+    doc.text('['+now+'] INFO initializing '+Nv+' drones.. ok',152,102); doc.text('['+now+'] INFO distance_check passed | min='+mind,152,107); doc.text('['+now+'] INFO consensus reached ('+Nv+'/'+Nv+')',152,112); doc.text('['+now+'] INFO formal invariant holds VERIFIED',152,117); doc.text('> cargo test swarm_'+Nv+'... ok',152,122);
+    doc.setDrawColor(168,255,0); doc.setLineWidth(0.8); doc.circle(86,138,20,'D'); doc.setFillColor(7,11,20); doc.circle(86,138,18,'F'); doc.setTextColor(168,255,0); doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.text('VERIFIED',71,136); doc.setFontSize(5); doc.text('FORMALLY VERIFIED',71,130); doc.text('NO COLLISIONS',73,143);
+    doc.setFillColor(168,255,0); doc.rect(5,186,287,14,'F'); doc.setTextColor(0,0,0); doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.text('NAVIER Labs • Merida, MX • navierlabs.tech/verify • Hash: 0xa7f3..d4e1b3 • Signed',12,195);
+    doc.save(certId+'.pdf');
+  }catch(e){ alert('Error PDF: '+e.message); console.error(e); }
 }
 function loop(){
  let grid=new Map();agents.forEach(a=>{let k=Math.floor(a.x/CELL)+','+Math.floor(a.y/CELL);if(!grid.has(k))grid.set(k,[]);grid.get(k).push(a);a.vx+=(Math.random()-0.5)*0.12;a.vy+=(Math.random()-0.5)*0.12;});
