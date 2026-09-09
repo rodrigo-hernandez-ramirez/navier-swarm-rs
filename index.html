@@ -1,14 +1,133 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NAVIER // Formal Drone Swarm Certification</title>
-<script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#070b14;color:#e2e8f0;font-family:Inter,system-ui,sans-serif}.hero{max-width:1120px;margin:auto;padding:22px 18px;text-align:center}.topbar{display:flex;justify-content:space-between;align-items:center;max-width:1120px;margin:auto;padding:10px 18px}.badge{border:1px solid #00ff88;color:#00ff88;padding:5px 12px;border-radius:20px;font-size:10px}.lang{display:flex;gap:6px}.lang button{padding:6px 12px;border-radius:20px;border:1px solid #334155;background:transparent;color:#94a3b8;font-weight:800;font-size:11px;cursor:pointer}.lang button.active{background:#00ff88;color:#000}h1{font-size:clamp(30px,5vw,58px);font-weight:900;text-transform:uppercase;line-height:.9;margin-top:10px}h1 span{color:#00ff88}.sub{color:#cbd5e1;margin:12px auto;max-width:760px;font-size:15px}.proof{display:flex;gap:10px;justify-content:center;margin:16px auto;flex-wrap:wrap;max-width:900px}.proof.p{background:#0a0e1a;border:1px solid #1e293b;border-radius:10px;padding:10px 12px;font-family:monospace;font-size:11px;text-align:left;min-width:210px}.proof.p b{color:#00ff88}.controls{background:#111827;border:1px solid #1e293b;border-radius:14px;padding:16px;max-width:880px;margin:18px auto;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;align-items:end}.controls label{font-size:9px;color:#94a3b8;display:block;text-align:left;margin-bottom:4px;letter-spacing:.7px;text-transform:uppercase}.controls input{padding:11px 12px;border-radius:10px;border:1px solid #334155;background:#0a0e1a;color:#fff;width:160px;font-weight:700}.btn{padding:15px 32px;border-radius:12px;font-weight:900;border:none;cursor:pointer;background:#00ff88;color:#000;box-shadow:0 0 18px rgba(0,255,136,.3);font-size:15px;margin:8px}.btn2{padding:12px 20px;border-radius:12px;font-weight:700;border:1px solid #334155;background:#0a0e1a;color:#e2e8f0;font-size:13px;cursor:pointer;margin:8px}canvas{width:100%;height:540px;background:#0f172a;border-radius:16px;border:1px solid #1e293b;display:block;margin-top:16px}.stats{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}.stat{background:#111827;border:1px solid #1e293b;border-radius:10px;padding:8px 12px;font-size:11px}.stat b{color:#00ff88}.pricing{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;max-width:980px;margin:26px auto;text-align:left}.plan{background:#111827;border:1px solid #1e293b;border-radius:16px;padding:18px;position:relative}.plan.best{border-color:#00ff88;box-shadow:0 0 20px rgba(0,255,136,.15)}.plan h3{font-size:13px;color:#fff}.price{font-size:28px;font-weight:900;margin:10px 0}.price span{font-size:13px;color:#94a3b8;font-weight:600}.plan ul{margin:10px 0 14px 16px}.plan li{font-size:12px;color:#94a3b8;margin-bottom:6px}.tag{position:absolute;top:-10px;right:14px;background:#00ff88;color:#000;font-size:9px;font-weight:900;padding:4px 8px;border-radius:20px}.footer{max-width:880px;margin:22px auto;color:#64748b;font-size:11px;text-align:center}</style></head><body>
-<div class="topbar"><div class="badge">Lean 4 KERNEL VERIFIED ✓ // Rust + Tokio</div><div class="lang"><button id="btnEN" class="active" onclick="setLang('en')">ENGLISH</button><button id="btnES" onclick="setLang('es')">ESPAÑOL</button></div></div>
-<div class="hero"><h1 id="mainTitle"><span id="countTitle">100</span> AGENTS. 0 COLLISIONS. <span>MATHEMATICALLY PROVEN.</span></h1><p class="sub" id="subText">Upload your drone fleet. We tell you the exact safe separation distance where they will never collide, and generate a formal PDF certificate you can show to the FAA, investors, or your client.</p>
-<div class="proof"><div class="proof p"><b>Lean 4 — Formal Proof</b><br>theorem no_collision<br> (h : minDist > safe) :<br> ∀ i j, i≠j → dist>0<br><span style="color:#00ff88">✔ VERIFIED in 0.84s</span></div><div class="proof p"><b>Rust — cargo test</b><br>> cargo test swarm_100<br>test 100_agents_avoid... ok<br>test min_distance > safe... ok<br><span style="color:#00ff88">✔ 100 agents passed</span></div><div class="proof p"><b>Certificate</b><br>NAVIER-CERT-100.pdf<br>Email: client@company.com<br>Timestamp: 2026-05-13T18:30Z<br><span style="color:#00ff88">✔ Signed</span></div></div>
-<div class="controls"><div><label id="l1">How many drones?</label><input type="number" id="numAgents" value="100" min="10" max="1000" step="10"></div><div><label id="l2">Drone size (m)</label><input type="number" id="droneSize" value="0.5" min="0.1" max="5" step="0.1"></div><div><label id="l3">Certificate email</label><input type="email" id="email" placeholder="client@company.com" style="width:210px"></div></div>
-<button class="btn" id="payBtn" onclick="pagar85()">GENERATE CERTIFICATE - $85 USD →</button><button class="btn2" id="sampleBtn" onclick="downloadSample()">📄 Download Sample Certificate</button>
-<canvas id="c"></canvas><div class="stats"><div class="stat"><span id="s1t">Fleet:</span> <b id="count">100 drones</b></div><div class="stat"><span id="s2t">Size:</span> <b id="size">0.50m</b></div><div class="stat"><span id="s3t">Safe:</span> <b id="safe">1.75m</b></div><div class="stat"><span id="s4t">Live:</span> <b id="mind">--</b></div><div class="stat"><span id="s5t">Status:</span> <b id="status">VERIFIED ✓</b></div></div>
-<div class="pricing"><div class="plan"><h3>PAY PER CERT</h3><div class="price">$85 USD<span>/ $1,480 MXN</span></div><ul><li>1 Formal PDF certificate</li><li>Lean 4 proof + Rust log</li><li>Email + timestamp + ID</li><li>For FAA / client / insurance</li></ul><button class="btn2" onclick="pagar85()" style="width:100%">Get Certificate $85 / $1,480 →</button></div><div class="plan"><h3>STARTER</h3><div class="price">$49<span>/ $850 MXN / mo</span></div><ul><li>Unlimited sims up to 100 drones</li><li>No certificates included</li><li>Daily formation testing</li><li>Best to try</li></ul><button class="btn2" onclick="subscribe('starter')" style="width:100%">Subscribe $49 / $850 →</button></div><div class="plan best"><div class="tag">MOST POPULAR</div><h3>PRO</h3><div class="price">$149<span>/ $2,600 MXN / mo</span></div><ul><li>Up to 300 drones unlimited</li><li><b style="color:#00ff88">3 Formal Certificates / mo</b></li><li>Extra cert $45</li><li>Priority WhatsApp</li></ul><button class="btn" onclick="subscribe('pro')" style="width:100%">Subscribe PRO $149 / $2,600 →</button></div><div class="plan"><h3>ENTERPRISE</h3><div class="price">$499<span>/ $8,700 MXN / mo</span></div><ul><li>Up to 1000 drones unlimited</li><li>Unlimited certificates</li><li>API access</li><li>Custom Lean proofs</li></ul><button class="btn2" onclick="subscribe('enterprise')" style="width:100%">Subscribe $499 / $8,700 →</button></div></div>
-<div class="footer">Need help? WhatsApp: +52 56 3504 9293 — Support only.</div></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NAVIER // Formal Drone Swarm Certification</title>
+<script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js">
+</script>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#070b14;color:#e2e8f0;font-family:Inter,system-ui,sans-serif}.hero{max-width:1120px;margin:auto;padding:22px 18px;text-align:center}.topbar{display:flex;justify-content:space-between;align-items:center;max-width:1120px;margin:auto;padding:10px 18px}.badge{border:1px solid #00ff88;color:#00ff88;padding:5px 12px;border-radius:20px;font-size:10px}.lang{display:flex;gap:6px}.lang button{padding:6px 12px;border-radius:20px;border:1px solid #334155;background:transparent;color:#94a3b8;font-weight:800;font-size:11px;cursor:pointer}.lang button.active{background:#00ff88;color:#000}h1{font-size:clamp(30px,5vw,58px);font-weight:900;text-transform:uppercase;line-height:.9;margin-top:10px}h1 span{color:#00ff88}.sub{color:#cbd5e1;margin:12px auto;max-width:760px;font-size:15px}.proof{display:flex;gap:10px;justify-content:center;margin:16px auto;flex-wrap:wrap;max-width:900px}.proof.p{background:#0a0e1a;border:1px solid #1e293b;border-radius:10px;padding:10px 12px;font-family:monospace;font-size:11px;text-align:left;min-width:210px}.proof.p b{color:#00ff88}.controls{background:#111827;border:1px solid #1e293b;border-radius:14px;padding:16px;max-width:880px;margin:18px auto;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;align-items:end}.controls label{font-size:9px;color:#94a3b8;display:block;text-align:left;margin-bottom:4px;letter-spacing:.7px;text-transform:uppercase}.controls input{padding:11px 12px;border-radius:10px;border:1px solid #334155;background:#0a0e1a;color:#fff;width:160px;font-weight:700}.btn{padding:15px 32px;border-radius:12px;font-weight:900;border:none;cursor:pointer;background:#00ff88;color:#000;box-shadow:0 0 18px rgba(0,255,136,.3);font-size:15px;margin:8px}.btn2{padding:12px 20px;border-radius:12px;font-weight:700;border:1px solid #334155;background:#0a0e1a;color:#e2e8f0;font-size:13px;cursor:pointer;margin:8px}canvas{width:100%;height:540px;background:#0f172a;border-radius:16px;border:1px solid #1e293b;display:block;margin-top:16px}.stats{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}.stat{background:#111827;border:1px solid #1e293b;border-radius:10px;padding:8px 12px;font-size:11px}.stat b{color:#00ff88}.pricing{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;max-width:980px;margin:26px auto;text-align:left}.plan{background:#111827;border:1px solid #1e293b;border-radius:16px;padding:18px;position:relative}.plan.best{border-color:#00ff88;box-shadow:0 0 20px rgba(0,255,136,.15)}.plan h3{font-size:13px;color:#fff}.price{font-size:28px;font-weight:900;margin:10px 0}.price span{font-size:13px;color:#94a3b8;font-weight:600}.plan ul{margin:10px 0 14px 16px}.plan li{font-size:12px;color:#94a3b8;margin-bottom:6px}.tag{position:absolute;top:-10px;right:14px;background:#00ff88;color:#000;font-size:9px;font-weight:900;padding:4px 8px;border-radius:20px}.footer{max-width:880px;margin:22px auto;color:#64748b;font-size:11px;text-align:center}</style>
+</head>
+<body>
+<div class="topbar">
+<div class="badge">Lean 4 KERNEL VERIFIED ✓ // Rust + Tokio</div>
+<div class="lang">
+<button id="btnEN" class="active" onclick="setLang('en')">ENGLISH</button>
+<button id="btnES" onclick="setLang('es')">ESPAÑOL</button>
+</div>
+</div>
+<div class="hero">
+<h1 id="mainTitle">
+<span id="countTitle">100</span> AGENTS. 0 COLLISIONS. <span>MATHEMATICALLY PROVEN.</span>
+</h1>
+<p class="sub" id="subText">Upload your drone fleet. We tell you the exact safe separation distance where they will never collide, and generate a formal PDF certificate you can show to the FAA, investors, or your client.</p>
+<div class="proof">
+<div class="proof p">
+<b>Lean 4 — Formal Proof</b>
+<br>theorem no_collision<br> (h : minDist > safe) :<br> ∀ i j, i≠j → dist>0<br>
+<span style="color:#00ff88">✔ VERIFIED in 0.84s</span>
+</div>
+<div class="proof p">
+<b>Rust — cargo test</b>
+<br>> cargo test swarm_100<br>test 100_agents_avoid... ok<br>test min_distance > safe... ok<br>
+<span style="color:#00ff88">✔ 100 agents passed</span>
+</div>
+<div class="proof p">
+<b>Certificate</b>
+<br>NAVIER-CERT-100.pdf<br>Email: client@company.com<br>Timestamp: 2026-05-13T18:30Z<br>
+<span style="color:#00ff88">✔ Signed</span>
+</div>
+</div>
+<div class="controls">
+<div>
+<label id="l1">How many drones?</label>
+<input type="number" id="numAgents" value="100" min="10" max="1000" step="10">
+</div>
+<div>
+<label id="l2">Drone size (m)</label>
+<input type="number" id="droneSize" value="0.5" min="0.1" max="5" step="0.1">
+</div>
+<div>
+<label id="l3">Certificate email</label>
+<input type="email" id="email" placeholder="client@company.com" style="width:210px">
+</div>
+</div>
+<button class="btn" id="payBtn" onclick="pagar85()">GENERATE CERTIFICATE - $85 USD →</button>
+<button class="btn2" id="sampleBtn" onclick="downloadSample()">📄 Download Sample Certificate</button>
+<canvas id="c">
+</canvas>
+<div class="stats">
+<div class="stat">
+<span id="s1t">Fleet:</span> <b id="count">100 drones</b>
+</div>
+<div class="stat">
+<span id="s2t">Size:</span> <b id="size">0.50m</b>
+</div>
+<div class="stat">
+<span id="s3t">Safe:</span> <b id="safe">1.75m</b>
+</div>
+<div class="stat">
+<span id="s4t">Live:</span> <b id="mind">--</b>
+</div>
+<div class="stat">
+<span id="s5t">Status:</span> <b id="status">VERIFIED ✓</b>
+</div>
+</div>
+<div class="pricing">
+<div class="plan">
+<h3>PAY PER CERT</h3>
+<div class="price">$85 USD<span>/ $1,480 MXN</span>
+</div>
+<ul>
+<li>1 Formal PDF certificate</li>
+<li>Lean 4 proof + Rust log</li>
+<li>Email + timestamp + ID</li>
+<li>For FAA / client / insurance</li>
+</ul>
+<button class="btn2" onclick="pagar85()" style="width:100%">Get Certificate $85 / $1,480 →</button>
+</div>
+<div class="plan">
+<h3>STARTER</h3>
+<div class="price">$49<span>/ $850 MXN / mo</span>
+</div>
+<ul>
+<li>Unlimited sims up to 100 drones</li>
+<li>No certificates included</li>
+<li>Daily formation testing</li>
+<li>Best to try</li>
+</ul>
+<button class="btn2" onclick="subscribe('starter')" style="width:100%">Subscribe $49 / $850 →</button>
+</div>
+<div class="plan best">
+<div class="tag">MOST POPULAR</div>
+<h3>PRO</h3>
+<div class="price">$149<span>/ $2,600 MXN / mo</span>
+</div>
+<ul>
+<li>Up to 300 drones unlimited</li>
+<li>
+<b style="color:#00ff88">3 Formal Certificates / mo</b>
+</li>
+<li>Extra cert $45</li>
+<li>Priority WhatsApp</li>
+</ul>
+<button class="btn" onclick="subscribe('pro')" style="width:100%">Subscribe PRO $149 / $2,600 →</button>
+</div>
+<div class="plan">
+<h3>ENTERPRISE</h3>
+<div class="price">$499<span>/ $8,700 MXN / mo</span>
+</div>
+<ul>
+<li>Up to 1000 drones unlimited</li>
+<li>Unlimited certificates</li>
+<li>API access</li>
+<li>Custom Lean proofs</li>
+</ul>
+<button class="btn2" onclick="subscribe('enterprise')" style="width:100%">Subscribe $499 / $8,700 →</button>
+</div>
+</div>
+<div class="footer">Need help? WhatsApp: +52 56 3504 9293 — Support only.</div>
+</div>
 <script>
 const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
 function resize(){canvas.width=canvas.offsetWidth*2;canvas.height=540*2}resize();addEventListener('resize',resize);
@@ -16,7 +135,7 @@ let N=100,DRONE_SIZE=0.5,agents=[],CELL=92;
 function calcSafe(s){return s*2.5+0.5}
 function initAgents(n){N=n;agents=[...Array(N)].map(()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-0.5)*3.2,vy:(Math.random()-0.5)*3.2}));document.getElementById('count').innerText=N+' drones';document.getElementById('countTitle').innerText=N;}
 initAgents(100);
-const PAY={MX:{cert:"https://mpago.la/1yWcADH",starter:"https://mpago.la/2iUuSwm",pro:"https://mpago.la/2B44zQZ",enterprise:"https://mpago.la/2nati9i"},US:{cert:"",starter:"",pro:"",enterprise:""}};
+const PAY={MX:{cert:"https://mpago.la/1yWcADH",starter:"https://mpago.la/1yWcADH",pro:"https://mpago.la/1yWcADH",enterprise:"https://mpago.la/1yWcADH"},US:{cert:"https://buy.stripe.com/6oUfZh65o3HN8bjaQBcIE04",starter:"https://buy.stripe.com/4gMcN565o4LR3V31g1cIE05",pro:"https://buy.stripe.com/28EeVd2Tc1zF63b4sdcIE03",enterprise:"https://buy.stripe.com/aFa5kD51k2DJ0IR7EpcIE02"}};
 const T={en:{title:n=>`<span id="countTitle">${n}</span> AGENTS. 0 COLLISIONS. <span>MATHEMATICALLY PROVEN.</span>`,sub:"Upload your drone fleet. We tell you the exact safe separation distance where they will never collide, and generate a formal PDF certificate you can show to the FAA, investors, or your client.",l1:"How many drones?",l2:"Drone size (m)",l3:"Certificate email",btn:"GENERATE CERTIFICATE - $85 USD →",sample:"📄 Download Sample Certificate",s1:"Fleet:",s2:"Size:",s3:"Safe:",s4:"Live:",s5:"Status:"},es:{title:n=>`<span id="countTitle">${n}</span> AGENTES. 0 COLISIONES. <span>MATEMÁTICAMENTE PROBADO.</span>`,sub:"Sube tu flota. Te decimos la distancia exacta segura y generamos un PDF certificado.",l1:"¿Cuántos drones?",l2:"Tamaño dron (m)",l3:"Email certificado",btn:"GENERAR CERTIFICADO - $85 USD →",sample:"📄 Descargar Certificado de Ejemplo",s1:"Flota:",s2:"Tamaño:",s3:"Segura:",s4:"Real:",s5:"Estado:"}};
 function setLang(l){document.getElementById('btnEN').classList.toggle('active',l==='en');document.getElementById('btnES').classList.toggle('active',l==='es');document.getElementById('mainTitle').innerHTML=T[l].title(N);document.getElementById('subText').innerText=T[l].sub;document.getElementById('l1').innerText=T[l].l1;document.getElementById('l2').innerText=T[l].l2;document.getElementById('l3').innerText=T[l].l3;document.getElementById('payBtn').innerText=T[l].btn;document.getElementById('sampleBtn').innerText=T[l].sample;document.getElementById('s1t').innerText=T[l].s1;document.getElementById('s2t').innerText=T[l].s2;document.getElementById('s3t').innerText=T[l].s3;document.getElementById('s4t').innerText=T[l].s4;document.getElementById('s5t').innerText=T[l].s5;}
 document.getElementById('numAgents').addEventListener('input',e=>{let v=parseInt(e.target.value)||100;v=Math.max(10,Math.min(1000,v));initAgents(v);setLang('en');});
@@ -26,7 +145,13 @@ function openPayModal(title, usLink, mxLink, waMsg){
   let usBtn=usLink?`<a href="${usLink}" target="_blank" style="display:block;background:#fff;color:#000;padding:14px;border-radius:10px;font-weight:900;text-align:center;margin:10px 0;text-decoration:none">🇺🇸 Pay USD - Stripe (coming)</a>`:`<div style="background:#1e293b;padding:10px;border-radius:8px;font-size:11px;color:#94a3b8;text-align:center">USD Stripe link coming soon - usa MXN por ahora</div>`;
   let w=window.open('', '_blank', 'width=520,height=720');
   if(!w){window.open(mxLink||usLink,'_blank');return;}
-  w.document.write(`<body style="background:#070b14;color:#e2e8f0;font-family:monospace;padding:20px"><div style="max-width:460px;margin:auto;border:2px solid #00ff88;padding:16px;border-radius:12px;background:#0a0e1a"><h2 style="color:#00ff88;text-align:center">${title}</h2><pre style="background:#070b14;border:1px solid #334155;padding:10px;border-radius:8px;white-space:pre-wrap;font-size:11px">${waMsg}</pre>${usBtn}${mxBtn}<a href="https://wa.me/525635049293?text=${encodeURIComponent(waMsg)}" target="_blank" style="display:block;border:1px solid #334155;padding:12px;border-radius:10px;text-align:center;margin-top:10px;color:#e2e8f0;text-decoration:none">📱 Mandar comprobante WhatsApp</a><p style="font-size:10px;color:#64748b;text-align:center;margin-top:8px">Al pagar se abre WhatsApp para seguimiento.</p></div></body>`);
+  w.document.write(`<body style="background:#070b14;color:#e2e8f0;font-family:monospace;padding:20px">
+<div style="max-width:460px;margin:auto;border:2px solid #00ff88;padding:16px;border-radius:12px;background:#0a0e1a">
+<h2 style="color:#00ff88;text-align:center">${title}</h2>
+<pre style="background:#070b14;border:1px solid #334155;padding:10px;border-radius:8px;white-space:pre-wrap;font-size:11px">${waMsg}</pre>${usBtn}${mxBtn}<a href="https://wa.me/525635049293?text=${encodeURIComponent(waMsg)}" target="_blank" style="display:block;border:1px solid #334155;padding:12px;border-radius:10px;text-align:center;margin-top:10px;color:#e2e8f0;text-decoration:none">📱 Mandar comprobante WhatsApp</a>
+<p style="font-size:10px;color:#64748b;text-align:center;margin-top:8px">Al pagar se abre WhatsApp para seguimiento.</p>
+</div>
+</body>`);
   w.document.close();
 }
 function pagar85(){
@@ -83,4 +208,6 @@ function loop(){
  agents.forEach(a=>{let ang=Math.atan2(a.vy,a.vx);ctx.save();ctx.translate(a.x,a.y);ctx.rotate(ang);ctx.fillStyle='#0f172a';ctx.fillRect(-5,-3.5,10,7);ctx.fillStyle='#00ff88';ctx.beginPath();ctx.arc(-4,-4,2.8,0,6.28);ctx.fill();ctx.beginPath();ctx.arc(4,-4,2.8,0,6.28);ctx.fill();ctx.beginPath();ctx.arc(-4,4,2.8,0,6.28);ctx.fill();ctx.beginPath();ctx.arc(4,4,2.8,0,6.28);ctx.fill();ctx.fillStyle='#ffffff';ctx.beginPath();ctx.arc(0,0,1.2,0,6.28);ctx.fill();ctx.restore();});
  let realM=minD/2;document.getElementById('mind').innerText=realM.toFixed(2)+'m';let safeReq=calcSafe(DRONE_SIZE),st=document.getElementById('status');if(realM>safeReq){st.innerText='VERIFIED ✓';st.style.color='#00ff88';}else{st.innerText='FAILED ✗';st.style.color='#ff4444';}requestAnimationFrame(loop);
 }loop();setLang('en');
-</script></body></html>
+</script>
+</body>
+</html>
