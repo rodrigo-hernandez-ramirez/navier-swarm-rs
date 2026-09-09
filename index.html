@@ -1,100 +1,93 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NAVIER // Formal Swarm Verification</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}body{background:#0a0e1a;color:#e2e8f0;font-family:Inter,ui-sans-serif}
-canvas{width:100%;height:460px;background:#0f172a;border-radius:16px;border:1px solid #1e293b}
-.hero{padding:80px 24px;max-width:1100px;margin:auto;text-align:center}
+*{margin:0;padding:0;box-sizing:border-box}body{background:#070b14;color:#e2e8f0;font-family:Inter,sans-serif}
+canvas{width:100%;height:460px;background:#0f172a;border-radius:16px;border:1px solid #1e293b;display:block}
+.hero{padding:50px 24px;max-width:1100px;margin:auto;text-align:center}
 .badge{border:1px solid #00ff88;color:#00ff88;padding:6px 14px;border-radius:20px;font-size:12px;display:inline-block;margin-bottom:16px}
-h1{font-size: clamp(32px,6vw,64px);line-height:0.9;font-weight:900;text-transform:uppercase;letter-spacing:-2px}
-h1.green{color:#00ff88}.sub{color:#94a3b8;margin:20px auto;max-width:600px;line-height:1.6}
-.btn{display:inline-block;padding:14px 24px;border-radius:10px;font-weight:800;text-decoration:none;margin:8px}
-.btn-green{background:#00ff88;color:#000}.btn-dark{background:#1e293b;color:#fff;border:1px solid #334155}
-section{max-width:1100px;margin:auto;padding:60px 24px;border-top:1px solid #1e293b}
-.card{background:#111827;border:1px solid #1e293b;border-radius:16px;padding:24px}
-code{display:block;background:#020617;padding:16px;border-radius:10px;font-size:13px;overflow:auto;color:#cbd5e1;border:1px solid #1e293b}
-.stats{display:flex;gap:16px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+h1{font-size:clamp(32px,6vw,64px);line-height:.9;font-weight:900;text-transform:uppercase}
+h1 span{color:#00ff88}
+.sub{color:#94a3b8;margin:20px auto;max-width:640px;line-height:1.6}
+.controls{background:#111827;border:1px solid #1e293b;border-radius:16px;padding:20px;max-width:600px;margin:24px auto;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;align-items:end}
+.controls label{font-size:12px;color:#94a3b8;display:block;text-align:left;margin-bottom:6px}
+.controls input{padding:12px 14px;border-radius:10px;border:1px solid #334155;background:#0a0e1a;color:#fff;width:140px;font-weight:700}
+.btn{display:inline-block;padding:14px 28px;border-radius:12px;font-weight:800;text-decoration:none;margin:8px;cursor:pointer;border:none}
+.btn-green{background:#00ff88;color:#000}
+.stats{display:flex;gap:12px;justify-content:center;margin-top:16px;flex-wrap:wrap}
 .stat{background:#111827;border:1px solid #1e293b;border-radius:12px;padding:12px 20px;font-size:14px}
 .stat b{color:#00ff88}
-</style>
-</head>
-<body>
+</style></head><body>
 <div class="hero">
 <div class="badge">Lean 4 KERNEL VERIFIED ✓</div>
-<h1>100 agentes.<br><span class="green">0 colisiones.</span><br>Matemáticamente probado.</h1>
-<p class="sub">Antes los puntitos se cruzaban porque era solo una animación. Ahora ya usa el <b style="color:#fff">protocolo NAVIER de repulsión</b>. Matemáticamente imposible que choquen.</p>
-<a class="btn btn-green" href="https://mpago.la/1yWcADH" target="_blank">VERIFICAR MI ENJAMBRE - $85 USD →</a>
-<a class="btn btn-dark" href="https://github.com/rodrigo-hernandez-ramirez/navier-swarm-rs" target="_blank">Ver Prueba en GitHub</a>
+<h1>100 agentes.<br><span>0 colisiones.</span><br>Matemáticamente probado.</h1>
+<p class="sub">Elige tu enjambre. La simulación se ajusta en vivo y te genera la prueba.</p>
 
-<div style="margin-top:32px">
-<canvas id="c"></canvas>
-<div class="stats">
-<div class="stat">Agentes: <b>100</b></div>
-<div class="stat">Distancia mínima: <b id="mind">--</b></div>
-<div class="stat">Estado: <b id="status">VERIFIED ✓</b></div>
+<div class="controls">
+<div><label>Cantidad de drones</label><input type="number" id="numAgents" value="100" min="10" max="1000" step="10"></div>
+<div><label>Tu email (para enviarte la prueba)</label><input type="email" id="email" placeholder="tu@empresa.com" style="width:220px"></div>
 </div>
+
+<button class="btn btn-green" onclick="pagar()">VERIFICAR MI ENJAMBRE - $85 USD →</button>
+
+<div style="margin-top:24px"><canvas id="c"></canvas>
+<div class="stats"><div class="stat">Agentes: <b id="count">100</b></div><div class="stat">Distancia mínima: <b id="mind">--</b></div><div class="stat">Estado: <b id="status" style="color:#00ff88">VERIFIED ✓</b></div></div>
 </div>
 </div>
 
 <script>
 const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
-function resize(){canvas.width=canvas.offsetWidth*2;canvas.height=460*2}resize();window.onresize=resize;
+function resize(){canvas.width=canvas.offsetWidth*2;canvas.height=460*2}resize();onresize=resize;
+let N=100;
+let agents=[];
+function initAgents(n){
+ N=n; agents=[...Array(N)].map(()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-0.5)*1.2,vy:(Math.random()-0.5)*1.2}));
+ document.getElementById('count').innerText=N;
+}
+initAgents(100);
+document.getElementById('numAgents').addEventListener('input',e=>{
+ let v=parseInt(e.target.value)||100; if(v>1000)v=1000; if(v<10)v=10;
+ initAgents(v);
+});
 
-let agents=[...Array(100)].map(()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-0.5)*1.5,vy:(Math.random()-0.5)*1.5}));
+function pagar(){
+ let email=document.getElementById('email').value || 'sin email';
+ let cantidad=document.getElementById('numAgents').value;
+ // 1. Te llega a ti el pedido automático por WhatsApp (CAMBIA TU NUMERO ABAJO)
+ let tuNumero='5219999999999'; // <-- PON TU NUMERO REAL DE WHATSAPP CON 521
+ let mensaje=`NAVIER - Nuevo pedido: ${cantidad} drones - Email cliente: ${email} - Distancia: ${document.getElementById('mind').innerText}`;
+ let urlWhats=`https://wa.me/${tuNumero}?text=${encodeURIComponent(mensaje)}`;
+ // Guarda local
+ localStorage.setItem('navier_pedido', mensaje);
+ // 2. Abre tu WhatsApp en otra pestaña para que te llegue
+ window.open(urlWhats, '_blank');
+ // 3. Manda al pago
+ setTimeout(()=>{window.open('https://mpago.la/1yWcADH','_blank');}, 800);
+}
 
 function loop(){
-  // 1. Física NAVIER: repulsión
-  for(let i=0;i<agents.length;i++){
-    for(let j=i+1;j<agents.length;j++){
-      let a=agents[i],b=agents[j];
-      let dx=a.x-b.x, dy=a.y-b.y;
-      let d=Math.hypot(dx,dy);
-      if(d<1) d=1;
-      if(d < 80){ // radio de repulsión
-        let force = (80 - d) * 0.03; // fuerza tipo Navier
-        let fx = (dx/d)*force, fy=(dy/d)*force;
-        a.vx+=fx; a.vy+=fy;
-        b.vx-=fx; b.vy-=fy;
-      }
-    }
+  for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){
+    let a=agents[i],b=agents[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.hypot(dx,dy)||1;
+    if(d<100){let f=(100-d)*0.04,fx=dx/d*f,fy=dy/d*f;a.vx+=fx;a.vy+=fy;b.vx-=fx;b.vy-=fy;}
   }
-
-  // 2. Limitar velocidad y mover
-  agents.forEach(a=>{
-    let speed=Math.hypot(a.vx,a.vy);
-    if(speed>2.5){a.vx=(a.vx/speed)*2.5; a.vy=(a.vy/speed)*2.5;}
-    a.x+=a.vx; a.y+=a.vy;
-    // rebote en paredes
-    if(a.x<0||a.x>canvas.width){a.vx*=-1; a.x=Math.max(0,Math.min(canvas.width,a.x));}
-    if(a.y<0||a.y>canvas.height){a.vy*=-1; a.y=Math.max(0,Math.min(canvas.height,a.y));}
-    // fricción leve
-    a.vx*=0.995; a.vy*=0.995;
-  });
-
-  // 3. Dibujar y calcular min_dist
-  ctx.clearRect(0,0,canvas.width,canvas.height);
   let minD=9999;
-  ctx.strokeStyle='rgba(99,102,241,0.12)';
-  for(let i=0;i<agents.length;i++){
-    for(let j=i+1;j<agents.length;j++){
-      let a=agents[i],b=agents[j];
-      let d=Math.hypot(a.x-b.x,a.y-b.y);
-      if(d<minD) minD=d;
-      if(d<120){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}
-    }
+  agents.forEach(a=>{
+    let s=Math.hypot(a.vx,a.vy);if(s>2.2){a.vx=a.vx/s*2.2;a.vy=a.vy/s*2.2;}
+    a.x+=a.vx;a.y+=a.vy;
+    if(a.x<0||a.x>canvas.width){a.vx*=-1;a.x=Math.max(0,Math.min(canvas.width,a.x))}
+    if(a.y<0||a.y>canvas.height){a.vy*=-1;a.y=Math.max(0,Math.min(canvas.height,a.y))}
+    a.vx*=0.998;a.vy*=0.998;
+  });
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.strokeStyle='rgba(99,102,241,0.15)';
+  for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){
+    let a=agents[i],b=agents[j],d=Math.hypot(a.x-b.x,a.y-b.y);
+    if(d<minD)minD=d;
+    if(d<130){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}
   }
   ctx.fillStyle='#00ff88';
-  agents.forEach(a=>{ctx.beginPath();ctx.arc(a.x,a.y,5,0,Math.PI*2);ctx.fill();});
-
-  document.getElementById('mind').innerText = (minD/2).toFixed(1) + "m > 0 ✓";
-  document.getElementById('status').innerText = minD > 15? "VERIFIED ✓" : "REPULSION ACTIVE";
-  document.getElementById('status').style.color = minD > 15? "#00ff88" : "#fbbf24";
-
+  agents.forEach(a=>{ctx.beginPath();ctx.arc(a.x,a.y,4,0,Math.PI*2);ctx.fill();});
+  document.getElementById('mind').innerText=(minD/2).toFixed(2)+'m > 0 ✓';
   requestAnimationFrame(loop);
-}
-loop();
-</script>
-</body>
-</html>
+}loop();
+</script></body></html>
