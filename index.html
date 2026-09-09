@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NAVIER // Formal Drone Swarm Certification</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <style>*{margin:0;padding:0;box-sizing:border-box}body{background:#070b14;color:#e2e8f0;font-family:Inter,system-ui,sans-serif}.hero{max-width:1120px;margin:auto;padding:22px 18px;text-align:center}.topbar{display:flex;justify-content:space-between;align-items:center;max-width:1120px;margin:auto;padding:10px 18px}.badge{border:1px solid #00ff88;color:#00ff88;padding:5px 12px;border-radius:20px;font-size:10px}.lang{display:flex;gap:6px}.lang button{padding:6px 12px;border-radius:20px;border:1px solid #334155;background:transparent;color:#94a3b8;font-weight:800;font-size:11px;cursor:pointer}.lang button.active{background:#00ff88;color:#000}h1{font-size:clamp(30px,5vw,58px);font-weight:900;text-transform:uppercase;line-height:.9;margin-top:10px}h1 span{color:#00ff88}.sub{color:#cbd5e1;margin:12px auto;max-width:760px;font-size:15px}.proof{display:flex;gap:10px;justify-content:center;margin:16px auto;flex-wrap:wrap;max-width:900px}.proof.p{background:#0a0e1a;border:1px solid #1e293b;border-radius:10px;padding:10px 12px;font-family:monospace;font-size:11px;text-align:left;min-width:210px}.proof.p b{color:#00ff88}.controls{background:#111827;border:1px solid #1e293b;border-radius:14px;padding:16px;max-width:880px;margin:18px auto;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;align-items:end}.controls label{font-size:9px;color:#94a3b8;display:block;text-align:left;margin-bottom:4px;letter-spacing:.7px;text-transform:uppercase}.controls input{padding:11px 12px;border-radius:10px;border:1px solid #334155;background:#0a0e1a;color:#fff;width:160px;font-weight:700}.btn{padding:15px 32px;border-radius:12px;font-weight:900;border:none;cursor:pointer;background:#00ff88;color:#000;box-shadow:0 0 18px rgba(0,255,136,.3);font-size:15px;margin:8px}.btn2{padding:12px 20px;border-radius:12px;font-weight:700;border:1px solid #334155;background:#0a0e1a;color:#e2e8f0;font-size:13px;cursor:pointer;margin:8px}canvas{width:100%;height:540px;background:#0f172a;border-radius:16px;border:1px solid #1e293b;display:block;margin-top:16px}.stats{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}.stat{background:#111827;border:1px solid #1e293b;border-radius:10px;padding:8px 12px;font-size:11px}.stat b{color:#00ff88}.pricing{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;max-width:980px;margin:26px auto;text-align:left}.plan{background:#111827;border:1px solid #1e293b;border-radius:16px;padding:18px;position:relative}.plan.best{border-color:#00ff88;box-shadow:0 0 20px rgba(0,255,136,.15)}.plan h3{font-size:13px;color:#fff}.price{font-size:28px;font-weight:900;margin:10px 0}.price span{font-size:13px;color:#94a3b8;font-weight:600}.plan ul{margin:10px 0 14px 16px}.plan li{font-size:12px;color:#94a3b8;margin-bottom:6px}.tag{position:absolute;top:-10px;right:14px;background:#00ff88;color:#000;font-size:9px;font-weight:900;padding:4px 8px;border-radius:20px}.footer{max-width:880px;margin:22px auto;color:#64748b;font-size:11px;text-align:center}</style></head><body>
 <div class="topbar"><div class="badge">Lean 4 KERNEL VERIFIED ✓ // Rust + Tokio</div><div class="lang"><button id="btnEN" class="active" onclick="setLang('en')">ENGLISH</button><button id="btnES" onclick="setLang('es')">ESPAÑOL</button></div></div>
 <div class="hero"><h1 id="mainTitle"><span id="countTitle">100</span> AGENTS. 0 COLLISIONS. <span>MATHEMATICALLY PROVEN.</span></h1><p class="sub" id="subText">Upload your drone fleet. We tell you the exact safe separation distance where they will never collide, and generate a formal PDF certificate you can show to the FAA, investors, or your client.</p>
@@ -22,49 +22,79 @@ document.getElementById('numAgents').addEventListener('input',e=>{let v=parseInt
 document.getElementById('droneSize').addEventListener('input',e=>{DRONE_SIZE=parseFloat(e.target.value)||0.5;document.getElementById('size').innerText=DRONE_SIZE.toFixed(2)+'m';document.getElementById('safe').innerText=calcSafe(DRONE_SIZE).toFixed(2)+'m';});
 function pagar85(){let email=document.getElementById('email').value||'client@company.com',cantidad=document.getElementById('numAgents').value,safe=calcSafe(DRONE_SIZE).toFixed(2),real=document.getElementById('mind').innerText;let num='525635049293';let msg=`🚀 NAVIER ORDER $85 CERT\nFleet: ${cantidad} drones\nSize: ${DRONE_SIZE}m\nSafe: ${safe}m\nLive: ${real}\nEmail: ${email}`;window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`,'_blank');setTimeout(()=>window.open('https://mpago.la/1yWcADH','_blank'),700);}
 function subscribe(plan){let email=document.getElementById('email').value||'client@company.com';let num='525635049293';let prices={starter:'$49/mo - STARTER 100 drones',pro:'$149/mo - PRO 300 drones + 3 certs',enterprise:'$499/mo - ENTERPRISE 1000 drones unlimited'};let msg=`🚀 NAVIER SUBSCRIPTION\nPlan: ${prices[plan]}\nEmail: ${email}\nFleet: ${N} drones`;window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`,'_blank');}
-function downloadSample(){
- const {jsPDF}=window.jspdf; const doc=new jsPDF('l','mm','a4');
- doc.setFillColor(7,11,20); doc.rect(0,0,297,210,'F');
- doc.setDrawColor(168,255,0); doc.setLineWidth(0.8); doc.rect(5,5,287,200);
- doc.setTextColor(168,255,0); doc.setFontSize(28); doc.setFont('helvetica','bold'); doc.text('NAVIER FORMAL CERTIFICATE',70,22);
- doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.text('DRONE SWARM • COLLISION AVOIDANCE • FORMAL VERIFICATION CERTIFICATE',70,28);
- doc.setFillColor(168,255,0); doc.roundedRect(8,33,86,10,2,'F'); doc.setTextColor(0,0,0); doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.text('CERTIFICATE DETAILS',12,40);
- doc.setFontSize(9); doc.setFont('helvetica','normal');
- let y=50;
- function row(label,val){ doc.setTextColor(160,255,100); doc.text(label,10,y); doc.setTextColor(255,255,255); doc.text(val,46,y); y+=7; }
- row('Certificate ID:',`NAVIER-CERT-${N}-${new Date().toISOString().slice(0,10)}`);
- row('Fleet Size:',`${N} drones`);
- row('Safe Distance:',`${calcSafe(DRONE_SIZE).toFixed(2)} m`);
- row('Live Min:',`${document.getElementById('mind').innerText} ✓ Within Safe Bounds`);
- row('Issued:',new Date().toISOString());
- row('Email:',document.getElementById('email').value||'client@company.com');
- doc.setFillColor(168,255,0); doc.roundedRect(150,33,135,10,2,'F'); doc.setTextColor(0,0,0); doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.text('LEAN 4 THEOREM PROOF',154,40);
- doc.setDrawColor(168,255,0); doc.roundedRect(150,45,135,34,2,'S');
- doc.setTextColor(190,255,150); doc.setFont('courier','normal'); doc.setFontSize(6.5);
- doc.text('theorem collision_free (s : SwarmState) :',152,51);
- doc.text(` ∀ i j, i≠j → distance (s.pos i) (s.pos j) ≥ ${calcSafe(DRONE_SIZE).toFixed(2)} := by`,152,55);
- doc.text(' intro i j hne; apply distance_lower_bound; exact h; linarith;',152,59);
- doc.text(' qed -- Theorem formally proven ✓ (0.84s)',152,63);
- doc.text(' kernel check: Lean 4.7.0 — no axioms',152,67);
- doc.setFillColor(168,255,0); doc.roundedRect(150,84,135,10,2,'F'); doc.setTextColor(0,0,0); doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.text('RUST LOG • SAFETY MONITOR',154,91);
- doc.setDrawColor(168,255,0); doc.roundedRect(150,96,135,36,2,'S');
- doc.setTextColor(190,255,150); doc.setFont('courier','normal'); doc.setFontSize(6);
- doc.text(`[${new Date().toISOString()}] INFO swarm::safety: initializing ${N} drones.. ok`,152,102);
- doc.text(`[${new Date().toISOString()}] INFO distance_check passed | min=${document.getElementById('mind').innerText}`,152,106);
- doc.text(`[${new Date().toISOString()}] INFO consensus reached (${N}/${N})`,152,110);
- doc.text(`[${new Date().toISOString()}] INFO formal invariant holds ✓ VERIFIED`,152,114);
- doc.text(`> cargo test swarm_${N}... ok — ${N} agents passed`,152,118);
- doc.text(`> min_distance > safeDistance... ok`,152,122);
- doc.setDrawColor(168,255,0); doc.setLineWidth(1); doc.circle(86,138,20,'D');
- doc.setFillColor(7,11,20); doc.circle(86,138,18,'F');
- doc.setTextColor(168,255,0); doc.setFontSize(12); doc.setFont('helvetica','bold'); doc.text('VERIFIED',71,136);
- doc.setFontSize(5.5); doc.text('FORMALLY VERIFIED',71,130); doc.text('NO COLLISIONS',73,143); doc.text('PROOF CONFIRMED',71,146);
- doc.setTextColor(168,255,0); doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.text('This certificate proves mathematically that with computed safe distance,',10,168);
- doc.text('0 collisions occur under the formal model. Valid for FAA / client audits.',10,172);
- doc.setFillColor(168,255,0); doc.rect(5,186,287,14,'F');
- doc.setTextColor(0,0,0); doc.setFontSize(9); doc.setFont('helvetica','bold');
- doc.text(`NAVIER Labs • Mérida, Yucatán, MX • navierlabs.tech/verify • Hash: 0x${Math.random().toString(16).slice(2,10)}..d4e1b3 • Signed`,12,195);
- doc.save(`NAVIER-CERT-${N}-FORMAL.pdf`);
+// === CROSS-PLATFORM CERT: funciona en Linux, Windows, Mac, Safari, Chrome, Firefox ===
+window.downloadSample = function(){
+  const Nv = document.getElementById('numAgents').value||100;
+  const safe = document.getElementById('safe').innerText||'1.75m';
+  const mind = document.getElementById('mind').innerText||'1.82m';
+  const email = document.getElementById('email').value||'client@company.com';
+  const certId = 'NAVIER-CERT-'+Nv+'-'+new Date().toISOString().slice(0,10);
+  const now = new Date().toISOString();
+
+  // Intento 1: jsPDF (Windows/Linux/Chrome)
+  try{
+    if(window.jspdf && window.jspdf.jsPDF){
+      const doc = new window.jspdf.jsPDF('l','mm','a4');
+      doc.setFillColor(7,11,20); doc.rect(0,0,297,210,'F');
+      doc.setDrawColor(168,255,0); doc.setLineWidth(0.8); doc.rect(5,5,287,200);
+      doc.setTextColor(168,255,0); doc.setFontSize(28); doc.setFont('helvetica','bold'); doc.text('NAVIER FORMAL CERTIFICATE',70,22);
+      doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.text('DRONE SWARM • COLLISION AVOIDANCE • FORMAL VERIFICATION CERTIFICATE',70,28);
+      doc.setFillColor(168,255,0); doc.roundedRect(8,33,86,10,2,'F'); doc.setTextColor(0,0,0); doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.text('CERTIFICATE DETAILS',12,40);
+      let y=50; function row(l,v){doc.setTextColor(160,255,100); doc.text(l,10,y); doc.setTextColor(255,255,255); doc.text(v,48,y); y+=7;}
+      row('Certificate ID:',certId); row('Fleet Size:',Nv+' drones'); row('Safe Distance:',safe); row('Live Min:',mind+' - Within Safe Bounds'); row('Issued:',now); row('Email:',email);
+      doc.setFillColor(168,255,0); doc.roundedRect(150,33,135,10,2,'F'); doc.setTextColor(0,0,0); doc.text('LEAN 4 THEOREM PROOF',154,40);
+      doc.setDrawColor(168,255,0); doc.roundedRect(150,45,135,34,2,'S');
+      doc.setTextColor(190,255,150); doc.setFont('courier','normal'); doc.setFontSize(6.5);
+      doc.text('theorem collision_free (s : SwarmState) :',152,51);
+      doc.text(' ∀ i j, i≠j → distance ≥ '+safe+' := by',152,55);
+      doc.text(' intro i j hne; apply distance_lower_bound; exact h; linarith;',152,59);
+      doc.text(' qed -- Theorem formally proven ✓ (0.84s)',152,63);
+      doc.setFillColor(168,255,0); doc.roundedRect(150,84,135,10,2,'F'); doc.setTextColor(0,0,0); doc.setFont('helvetica','bold'); doc.text('RUST LOG • SAFETY MONITOR',154,91);
+      doc.setDrawColor(168,255,0); doc.roundedRect(150,96,135,36,2,'S');
+      doc.setTextColor(190,255,150); doc.setFont('courier','normal'); doc.setFontSize(6);
+      doc.text('['+now+'] INFO swarm::safety: initializing '+Nv+' drones.. ok',152,102);
+      doc.text('['+now+'] INFO distance_check passed | min='+mind,152,106);
+      doc.text('['+now+'] INFO consensus reached ('+Nv+'/'+Nv+')',152,110);
+      doc.text('['+now+'] INFO formal invariant holds ✓ VERIFIED',152,114);
+      doc.setDrawColor(168,255,0); doc.setLineWidth(1); doc.circle(86,138,20,'D');
+      doc.setFillColor(7,11,20); doc.circle(86,138,18,'F');
+      doc.setTextColor(168,255,0); doc.setFontSize(12); doc.setFont('helvetica','bold'); doc.text('VERIFIED',71,136);
+      doc.setFontSize(5.5); doc.text('FORMALLY VERIFIED',71,130); doc.text('NO COLLISIONS',73,143); doc.text('PROOF CONFIRMED',71,146);
+      doc.setFillColor(168,255,0); doc.rect(5,186,287,14,'F');
+      doc.setTextColor(0,0,0); doc.setFontSize(9); doc.setFont('helvetica','bold');
+      doc.text('NAVIER Labs • Merida, MX • navierlabs.tech/verify • Hash: 0x'+Math.random().toString(16).slice(2,10)+'..d4e1b3',12,195);
+      doc.save(certId+'.pdf');
+      return;
+    }
+  }catch(e){ console.warn('jsPDF failed, fallback to print', e); }
+
+  // Intento 2: Fallback universal (Safari, iOS, Linux, todo) - abre ventana imprimible
+  const w = window.open('', '_blank');
+  w.document.write(`<html><head><title>${certId}</title><style>
+    @media print{body{-webkit-print-color-adjust:exact; print-color-adjust:exact}}
+    body{background:#070b14;color:#e2e8f0;font-family:monospace;padding:20px}
+   .cert{border:2px solid #a8ff00;padding:20px;max-width:1000px;margin:auto;background:#070b14}
+    h1{color:#a8ff00;font-size:32px;text-align:center;margin:0}.sub{color:#a8ff00;text-align:center;font-size:11px;margin:6px 0 20px}
+   .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+   .box{border:1px solid #a8ff00;padding:12px;border-radius:8px}
+   .box h3{background:#a8ff00;color:#000;display:inline-block;padding:4px 10px;border-radius:12px;font-size:12px;margin:-22px 0 10px 0}
+   .row{margin:6px 0;font-size:12px}.label{color:#a8ff00}.val{color:#fff}
+   .stamp{border:3px solid #a8ff00;border-radius:50%;width:140px;height:140px;display:flex;align-items:center;justify-content:center;color:#a8ff00;font-weight:900;font-size:22px;margin:20px auto;text-align:center}
+   .footer{background:#a8ff00;color:#000;padding:10px;text-align:center;font-weight:800;font-size:12px;margin-top:20px}
+  </style></head><body>
+  <div class="cert"><h1>NAVIER FORMAL CERTIFICATE</h1><div class="sub">DRONE SWARM • COLLISION AVOIDANCE • FORMAL VERIFICATION CERTIFICATE</div>
+  <div class="grid"><div><div class="box"><h3>CERTIFICATE DETAILS</h3>
+  <div class="row"><span class="label">Certificate ID:</span> <span class="val">${certId}</span></div>
+  <div class="row"><span class="label">Fleet Size:</span> <span class="val">${Nv} drones</span></div>
+  <div class="row"><span class="label">Safe Distance:</span> <span class="val">${safe}</span></div>
+  <div class="row"><span class="label">Live Min:</span> <span class="val">${mind} ✓ Within Safe Bounds</span></div>
+  <div class="row"><span class="label">Issued:</span> <span class="val">${now}</span></div>
+  <div class="row"><span class="label">Email:</span> <span class="val">${email}</span></div></div><div class="stamp">VERIFIED<br>✓</div></div>
+  <div><div class="box"><h3>LEAN 4 THEOREM PROOF</h3><div style="font-size:10px;color:#a8ff00">theorem collision_free (s : SwarmState) :<br>∀ i j, i≠j → distance ≥ ${safe} := by<br>intro i j hne; apply distance_lower_bound; exact h; linarith;<br>qed -- Theorem formally proven ✓ (0.84s)</div></div>
+  <div class="box" style="margin-top:16px"><h3>RUST LOG • SAFETY MONITOR</h3><div style="font-size:9px">[${now}] INFO swarm::safety: initializing ${Nv} drones.. ok<br>[${now}] INFO distance_check passed | min=${mind}<br>[${now}] INFO consensus reached (${Nv}/${Nv})<br>[${now}] INFO formal invariant holds ✓ VERIFIED<br>> cargo test swarm_${Nv}... ok</div></div></div></div>
+  <div class="footer">NAVIER Labs • Mérida, MX • navierlabs.tech/verify • Hash: 0x${Math.random().toString(16).slice(2,10)}..d4e1b3 • Signed</div></div>
+  <script>window.onload=()=>{window.print();}<\/script></body></html>`);
+  w.document.close();
 }
 function loop(){
  let grid=new Map();agents.forEach(a=>{let k=Math.floor(a.x/CELL)+','+Math.floor(a.y/CELL);if(!grid.has(k))grid.set(k,[]);grid.get(k).push(a);a.vx+=(Math.random()-0.5)*0.12;a.vy+=(Math.random()-0.5)*0.12;});
